@@ -1,0 +1,11 @@
+#include <SDL/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include "../include/Personnage.h"
+#include "../include/Taille2D.h"
+#include "../include/Dessin.h"
+#include "../include/Color3f.h"
+#include "../include/Point2D.h"
