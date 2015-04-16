@@ -3,7 +3,7 @@ CFLAGS = -Wall -O2 -g
 LDFLAGS = -lSDL -lm -lGLU -lGL -lglut 
 
 
-APP_BIN = ThomasWasAlone
+APP_BIN = main
 
 SRC_PATH = src
 OBJ_PATH = obj
