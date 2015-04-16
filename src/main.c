@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
             
             case SDLK_RIGHT:
               
-              if(collision!=1){
+              if(collision==1){
               MooveRight(&henry);
               }
               printf("%d\n",collision);
