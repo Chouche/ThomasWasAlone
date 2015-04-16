@@ -2,6 +2,8 @@
 #include "../include/Dessin.h"
 
 
+
+
 Personnage Personnage2D(Point2D position, Taille2D taille, Color3f color) {
     Personnage p;
     p.position = position;
@@ -10,15 +12,9 @@ Personnage Personnage2D(Point2D position, Taille2D taille, Color3f color) {
     return p;
 }
 
+
 void DessinPersonnageCarre(Personnage perso){
 	
-	float PositionX=perso.position.x;
-	float PositionY=perso.position.y;
-	float tailleX=perso.taille.x;
-	float tailleY=perso.taille.y;
-	float red=perso.color.r;
-	float green=perso.color.g;
-	float blue=perso.color.b;
-
-	dessinCarre(1,red,green,blue,PositionX,PositionY,tailleX,tailleY);
+	dessinCarre(1,perso.color.r,perso.color.g,perso.color.b,perso.position.x,perso.position.y,perso.taille.x,perso.taille.y);
 }
+

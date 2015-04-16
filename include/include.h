@@ -9,3 +9,5 @@
 #include "../include/Dessin.h"
 #include "../include/Color3f.h"
 #include "../include/Point2D.h"
+#include "../include/Bloc.h"
+#include "../include/Physics.h"
