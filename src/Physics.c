@@ -1,19 +1,21 @@
 #include "../include/Physics.h"
+#include <math.h>
 
-void MooveRight(Personnage * perso){
-	perso->position.x=perso->position.x+1;
-}
+static const double g=9.2;
+static const float v_init = 0.5;
+static const double pi= M_PI ;
+static const double angle_init = M_PI/3;
 
-int Collision(Personnage perso, Bloc bloc ){
-	if(perso.position.x >=  bloc.position.x
-					&& perso.position.x < bloc.position.x + bloc.taille.x
-					&& perso.position.y >= bloc.position.y
-					&& perso.position.y  <= bloc.position.y + bloc.taille.y
-					){
-		return 1;
-	}
-	else{
-		return 0;
-	}
 
+
+
+void Jump(Personnage * perso,int t){
+
+	double v_x = cos(angle_init)*v_init;
+	double v_y = sin(angle_init)*v_init;
+
+	perso->position.x=(v_x*t);
+	perso->position.y=((v_y*t)-((g*t*t)/2000));
+
+	
 }

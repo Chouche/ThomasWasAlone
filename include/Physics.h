@@ -6,8 +6,7 @@
 #include "Taille2D.h"
 #include "Bloc.h"
 
-void MooveRight(Personnage * perso);
-int Collision(Personnage perso, Bloc bloc );
 
+void Jump(Personnage * perso,int t);
 
 #endif

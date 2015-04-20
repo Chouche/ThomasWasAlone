@@ -11,3 +11,5 @@
 #include "../include/Point2D.h"
 #include "../include/Bloc.h"
 #include "../include/Physics.h"
+#include "../include/MoovePerso.h"
+#include "../include/Collision.h"

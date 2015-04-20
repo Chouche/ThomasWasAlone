@@ -29,6 +29,8 @@ int main(int argc, char** argv) {
   unsigned int windowWidth  = 1600/1.5;
   unsigned int windowHeight = 1200/1.5;
 
+  int left=0,right=0,up=0,t=0;
+
   //Initialisation des personnages//
       Personnage henry = Personnage2D(PointXY(0.5,0.5),TailleXY(2,2),ColorRGB(100,100,100));
       Bloc bloc1 =Bloc2D(PointXY(-10,10),TailleXY(20,5),ColorRGB(250,00,00)); 
@@ -56,8 +58,10 @@ int main(int argc, char** argv) {
     Uint32 startTime = SDL_GetTicks();
 
     //Initialisation des variables physics
-    int collision = Collision(henry,bloc1)+Collision(henry,bloc2)+Collision(henry,bloc3)+Collision(henry,bloc4);
     
+    int collisionHG = CollisionHG(henry,bloc1)+CollisionHG(henry,bloc2)+CollisionHG(henry,bloc3)+CollisionHG(henry,bloc4);
+    int collisionHD = CollisionHD(henry,bloc1)+CollisionHD(henry,bloc2)+CollisionHD(henry,bloc3)+CollisionHD(henry,bloc4);
+
     glClear(GL_COLOR_BUFFER_BIT);
     //Changement de matrice
     glMatrixMode(GL_MODELVIEW);
@@ -95,14 +99,45 @@ int main(int argc, char** argv) {
           switch(e.key.keysym.sym){
             
             case SDLK_RIGHT:
-              
-              if(collision==1){
-              MooveRight(&henry);
-              }
-              printf("%d\n",collision);
-              printf("%f\n",henry.position.x );
-              printf("%f\n",bloc2.position.x );
+              right=1;
 
+              break;
+
+            case SDLK_LEFT: 
+              left=1;
+ 
+              break;
+
+            case SDLK_UP:
+              up=1;
+              break;  
+              
+
+            case SDLK_ESCAPE :
+              loop = 0;
+              break;
+            default : break;
+          }
+          break;
+
+        case SDL_KEYUP:
+          switch(e.key.keysym.sym){
+            
+            case SDLK_RIGHT:
+              right=0;
+
+              break;
+
+            case SDLK_LEFT:
+            
+              left=0;
+              
+              break;
+
+            case SDLK_UP:
+            
+              left=1;
+              
               break;
 
             case SDLK_ESCAPE :
@@ -112,12 +147,26 @@ int main(int argc, char** argv) {
           }
           break;
 
-        
-
         default:
           break;
       }
     }
+
+    //Déplacement;
+    if(left==1 && collisionHG!=1){
+      MooveLeft(&henry);
+    }
+
+    if(right==1 && collisionHD!=1){
+      MooveRight(&henry);
+    }
+
+    if(up==1){
+
+      Jump(&henry,t);
+      t+=10;
+    }
+
 
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {
