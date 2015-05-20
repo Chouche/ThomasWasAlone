@@ -32,7 +32,9 @@ int main(int argc, char** argv) {
 
   unsigned int nb_bloc = 5;
   int left=0,right=0,up=0, down = 0,direction=0,angle_init, i = 0;
-  int collisionHG = 0, collisionBG = 0, collisionHD = 0, collisionBD = 0;
+  int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
+ 
+
   double t = 0.0;
 
   Bloc blocs[nb_bloc];
@@ -68,16 +70,20 @@ int main(int argc, char** argv) {
 
     //Initialisation des variables physics
 
-    collisionHG = 0;
-    collisionHD = 0;
-    collisionBG = 0;
-    collisionBD = 0;
+    int colLeft = 0, colRight = 0, colUp = 0, colDown = 0;
+
+    for(i = 0; i < nb_bloc; i++){
+      collisionHG[i] = 0;
+      collisionHD[i] = 0;
+      collisionBG[i] = 0;
+      collisionBD[i] = 0;
+    }
 
     for(i = 0; i < nb_bloc; i++) {
-      collisionHG += CollisionHG(henry,blocs[i]);
-      collisionHD += CollisionHD(henry,blocs[i]);
-      collisionBG += CollisionBG(henry,blocs[i]);
-      collisionBD += CollisionBD(henry,blocs[i]);
+      collisionHG[i] = CollisionHG(henry,blocs[i]);
+      collisionHD[i] = CollisionHD(henry,blocs[i]);
+      collisionBG[i] = CollisionBG(henry,blocs[i]);
+      collisionBD[i] = CollisionBD(henry,blocs[i]);
     }
     
     glClear(GL_COLOR_BUFFER_BIT);
@@ -185,31 +191,53 @@ int main(int argc, char** argv) {
     }
 
     //Déplacement
-    if(left==1 && collisionHG!=1 && collisionBG != 1 ){
-      MooveLeft(&henry);
+   /* printf("HD: %d\n",collisionHG[0].col );*/
+    
+    if(left == 1){
+      for(i=0; i<nb_bloc; i++ ) 
+        if(collisionHG[i] == 1 || collisionBG[i] == 1) colLeft = 1;
+      if(colLeft == 0) MooveLeft(&henry);
     }
 
-    if(right==1 && collisionHD!=1 && collisionBD != 1){
-      MooveRight(&henry);
+    if(right == 1){
+      for(i=0; i<nb_bloc; i++ ) 
+        if(collisionHD[i] == 1 || collisionBD[i] == 1) colRight = 1;
+      if(colRight == 0) MooveRight(&henry);
     }
 
-    if(down == 1 && collisionBD !=2 && collisionBG != 2){
-      MooveDown(&henry);
+    /* SAUT */
+    if(up == 1){
+      for(i=0; i<nb_bloc; i++) 
+        if(collisionHD[i] == 2 || collisionHG[i] == 2) colUp = 1;
+      if(colUp == 0) MooveUp(&henry);
     }
 
-    if(collisionBD !=2 && collisionBG != 2){
-      /*t += 0.3;
-      Fall(&henry, t);*/
-      MooveDown(&henry);
-    }
-    /*else
-      t = 0.;*/
 
-    if(up == 1 && collisionHD !=2 && collisionHG != 2){
-      MooveUp(&henry);
+    /* GRAVITE */
+    for(i=0; i<nb_bloc; i++ ) {
+      if(collisionBD[i] == 2 || collisionBG[i] == 2){
+        colDown = 1;
+      } 
     }
+    if(colDown == 0) {
+        t += 1;
+        Fall(&henry, t);
+        for(i=0; i<nb_bloc; i++ ) { 
+         if(CollisionBG(henry,blocs[i]) == 2)  henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+         if(CollisionBD(henry,blocs[i]) == 2)  henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+           
+        }
+    }
+   else
+    t = 0.;
 
-    // 
+
+
+    /*if(down == 1){
+      for(i=0; i<nb_bloc; i++ ) 
+        if(collisionBD[i] == 2 || collisionBG[i] == 2) colDown = 1;
+      if(colDown == 0) MooveDown(&henry);
+    }*/
 
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {

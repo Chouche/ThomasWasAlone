@@ -9,6 +9,7 @@
 #include <math.h>
 
 
+
 int CollisionHD(Personnage perso, Bloc bloc );
 int CollisionHG(Personnage perso, Bloc bloc );
 int CollisionBD(Personnage perso, Bloc bloc );
