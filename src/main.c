@@ -263,6 +263,21 @@ int main(int argc, char** argv) {
           up=0;
           
          }  
+         if(CollisionHD(henry,blocs[i]) == 2)
+         {
+          henry.position.y = blocs[i].position.y-henry.taille.y;
+          colDown=0;
+          up=0;
+          t=0.;
+         } 
+         if(CollisionHG(henry,blocs[i]) == 2)
+         {
+          henry.position.y = blocs[i].position.y-henry.taille.y;
+          colDown=0;
+          up=0;
+          t=0.;
+          
+         } 
            
         }
     }
