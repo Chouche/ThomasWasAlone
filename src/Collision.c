@@ -11,7 +11,7 @@ int CollisionBG(Personnage perso, Bloc bloc ){
 					&& perso.position.y-0.5  <= bloc.position.y + bloc.taille.y
 					){
 		
-		//Si droite = 1, le bloc est à droite
+			//Si droite = 1, le bloc est à droite
 			if(DistanceAB(bloc.position.x+bloc.taille.x,bloc.position.y,perso.position.x,perso.position.y) < DistanceAB(bloc.position.x+bloc.taille.x,bloc.position.y+bloc.taille.y,bloc.position.x+bloc.taille.x,bloc.position.y))
 				gauche = 1;
 			//Si le droite = 2, le bloc est en haut
@@ -35,7 +35,7 @@ if(perso.position.x+perso.taille.x >=  bloc.position.x
 					&& perso.position.y-0.5  <= bloc.position.y + bloc.taille.y
 					){
 
-		//Si droite = 1, le bloc est à droite
+			//Si droite = 1, le bloc est à droite
 			if(DistanceAB(bloc.position.x,bloc.position.y,perso.position.x+perso.taille.x,perso.position.y) < DistanceAB(bloc.position.x,bloc.position.y+bloc.taille.y,bloc.position.x,bloc.position.y))
 				droite= 1;
 			//Si le droite = 2, le bloc est en haut
