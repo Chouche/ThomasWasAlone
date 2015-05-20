@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
   unsigned int windowHeight = 600;
 
   unsigned int nb_bloc = 5;
-  int left=0,right=0,up=1, down = 0,direction=0,angle_init, i = 0;
+  int left=0,right=0,up=0, down = 0,direction=0,angle_init, i = 0;
   int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
  
 
@@ -204,41 +204,70 @@ int main(int argc, char** argv) {
       if(colRight == 0) MooveRight(&henry);
     }
 
-    /* SAUT */
-    if(up == 1){
-      for(i=0; i<nb_bloc; i++) 
-        if(collisionHD[i] == 2 || collisionHG[i] == 2)
-          {
-            up=0;
-            colUp = 1;
-           } 
-      if(colUp == 0) {
-        t+=1;
-        Gravity(&henry,t,0.15);
-      }
-    }
-    else
-    {
-      t=0;
-    }
-
+    // /* SAUT */
+    // if(up == 1){
+    //   for(i=0; i<nb_bloc; i++) 
+    //     if(collisionHD[i] == 2 || collisionHG[i] == 2)
+    //       {
+    //         up=0;
+    //         colUp = 1;
+    //        } 
+    //   if(colUp == 1) {
+    //     t+=1;
+    //     Gravity(&henry,t,0.15);
+    //     for(i=0; i<nb_bloc; i++ ) { 
+    //      if(CollisionBG(henry,blocs[i]) == 2)  henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+    //      if(CollisionBD(henry,blocs[i]) == 2)  henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+           
+    //     }
+    //   }
+    // }
+    
     /* GRAVITE */
     for(i=0; i<nb_bloc; i++ ) {
       if(collisionBD[i] == 2 || collisionBG[i] == 2){
         colDown = 1;
+        t=0.;
       } 
     }
     if(colDown == 0) {
         t += 1;
         Gravity(&henry, t,0);
         for(i=0; i<nb_bloc; i++ ) { 
-         if(CollisionBG(henry,blocs[i]) == 2)  henry.position.y = blocs[i].position.y+blocs[i].taille.y;
-         if(CollisionBD(henry,blocs[i]) == 2)  henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+         if(CollisionBG(henry,blocs[i]) == 2)
+         {
+            henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+           
+         }  
+         if(CollisionBD(henry,blocs[i]) == 2){
+            henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+           
+         }  
+           
+        }
+    } 
+    if( colDown = 1 && up == 1) {
+        t += 1;
+         henry.position.y = henry.position.y+5;
+        Gravity(&henry, t,0.05);
+        for(i=0; i<nb_bloc; i++ ) { 
+         if(CollisionBG(henry,blocs[i]) == 2)
+         {
+            henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+            up=0;
+           
+         }  
+         if(CollisionBD(henry,blocs[i]) == 2)
+         {
+          henry.position.y = blocs[i].position.y+blocs[i].taille.y;
+          up=0;
+          
+         }  
            
         }
     }
-   else
-    t = 0.;
+   
+
 
 
 
