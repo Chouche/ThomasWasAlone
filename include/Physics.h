@@ -7,6 +7,7 @@
 #include "Bloc.h"
 
 
-void Jump(Personnage * perso,int t);
+void Jump(Personnage * perso,int t,int direction, int angle_init);
+void Fall(Personnage * perso,int t);
 
 #endif
