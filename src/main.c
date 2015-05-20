@@ -1,6 +1,7 @@
 #include "../include/include.h"
 
 static const unsigned int BIT_PER_PIXEL = 32;
+static const unsigned int MAX_BLOC = 100;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 void reshape(int winWidth, int winHeight) {
@@ -26,17 +27,25 @@ void setVideoMode(int winWidth, int winHeight) {
 
 int main(int argc, char** argv) {
 
-  unsigned int windowWidth  = 1600;
-  unsigned int windowHeight = 1200;
+  unsigned int windowWidth  = 800;
+  unsigned int windowHeight = 600;
 
-  int left=0,right=0,up=0, down = 0, t=1,direction=0,angle_init;
+  unsigned int nb_bloc = 5;
+  int left=0,right=0,up=0, down = 0,direction=0,angle_init, i = 0;
+  int collisionHG = 0, collisionBG = 0, collisionHD = 0, collisionBD = 0;
+  double t = 0.0;
+
+  Bloc blocs[nb_bloc];
 
   //Initialisation des personnages//
-      Personnage henry = Personnage2D(PointXY(2,2),TailleXY(20,5),ColorRGB(100,100,100));
-      Bloc bloc1 =Bloc2D(PointXY(-50,10.),TailleXY(50,50),ColorRGB(250,00,00)); 
-      Bloc bloc2 =Bloc2D(PointXY(50,0),TailleXY(25,20),ColorRGB(250,00,00));
-      Bloc bloc3 =Bloc2D(PointXY(100,-10),TailleXY(5,20),ColorRGB(250,00,00));
-      Bloc bloc4 =Bloc2D(PointXY(-100,-10),TailleXY(5,20),ColorRGB(250,00,00));
+      Personnage henry = Personnage2D(PointXY(2,2),TailleXY(20,20),ColorRGB(100,100,100));
+      
+
+      blocs[0] = Bloc2D(PointXY(-50,10.),TailleXY(50,50),ColorRGB(250,00,00)); 
+      blocs[1] = Bloc2D(PointXY(50,0),TailleXY(25,20),ColorRGB(250,00,00));
+      blocs[2] = Bloc2D(PointXY(100,-10),TailleXY(5,20),ColorRGB(250,00,00));
+      blocs[3] = Bloc2D(PointXY(-100,-10),TailleXY(5,20),ColorRGB(250,00,00));
+      blocs[4] = Bloc2D(PointXY(-10,-50),TailleXY(150,10),ColorRGB(250,00,00));
 
   
 
@@ -58,12 +67,19 @@ int main(int argc, char** argv) {
     Uint32 startTime = SDL_GetTicks();
 
     //Initialisation des variables physics
-    
-    int collisionHG = CollisionHG(henry,bloc1)+CollisionHG(henry,bloc2)+CollisionHG(henry,bloc3)+CollisionHG(henry,bloc4);
-    int collisionHD = CollisionHD(henry,bloc1)+CollisionHD(henry,bloc2)+CollisionHD(henry,bloc3)+CollisionHD(henry,bloc4);
-    int collisionBG = CollisionBG(henry,bloc1)+CollisionBG(henry,bloc2)+CollisionBG(henry,bloc3)+CollisionBG(henry,bloc4);
-    int collisionBD = CollisionBD(henry,bloc1)+CollisionBD(henry,bloc2)+CollisionBD(henry,bloc3)+CollisionBD(henry,bloc4);
 
+    collisionHG = 0;
+    collisionHD = 0;
+    collisionBG = 0;
+    collisionBD = 0;
+
+    for(i = 0; i < nb_bloc; i++) {
+      collisionHG += CollisionHG(henry,blocs[i]);
+      collisionHD += CollisionHD(henry,blocs[i]);
+      collisionBG += CollisionBG(henry,blocs[i]);
+      collisionBD += CollisionBD(henry,blocs[i]);
+    }
+    
     glClear(GL_COLOR_BUFFER_BIT);
     //Changement de matrice
     glMatrixMode(GL_MODELVIEW);
@@ -73,11 +89,10 @@ int main(int argc, char** argv) {
      
     //Dessin ici :)
   
-       DessinPersonnageCarre(henry);
-      DessinBlocCarre(bloc1);
-       DessinBlocCarre(bloc2);
-       DessinBlocCarre(bloc3);
-       DessinBlocCarre(bloc4);
+    DessinPersonnageCarre(henry);
+
+    for(i=0; i < nb_bloc; i++) 
+      DessinBlocCarre(blocs[i]);
 
 
     SDL_GL_SwapBuffers();
@@ -169,7 +184,6 @@ int main(int argc, char** argv) {
       }
     }
 
-    printf("HD: %d\n",collisionHG);
     //Déplacement
     if(left==1 && collisionHG!=1 && collisionBG != 1 ){
       MooveLeft(&henry);
@@ -182,6 +196,14 @@ int main(int argc, char** argv) {
     if(down == 1 && collisionBD !=2 && collisionBG != 2){
       MooveDown(&henry);
     }
+
+    if(collisionBD !=2 && collisionBG != 2){
+      /*t += 0.3;
+      Fall(&henry, t);*/
+      MooveDown(&henry);
+    }
+    /*else
+      t = 0.;*/
 
     if(up == 1 && collisionHD !=2 && collisionHG != 2){
       MooveUp(&henry);
