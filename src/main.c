@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
   unsigned int windowHeight = 600;
 
   unsigned int nb_bloc = 5;
-  int left=0,right=0,up=0, down = 0,direction=0,angle_init, i = 0;
+  int left=0,right=0,up=1, down = 0,direction=0,angle_init, i = 0;
   int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
  
 
@@ -166,8 +166,7 @@ int main(int argc, char** argv) {
 
             case SDLK_UP:
 
-            up = 0;
-          
+             
             
               break;
 
@@ -208,10 +207,20 @@ int main(int argc, char** argv) {
     /* SAUT */
     if(up == 1){
       for(i=0; i<nb_bloc; i++) 
-        if(collisionHD[i] == 2 || collisionHG[i] == 2) colUp = 1;
-      if(colUp == 0) MooveUp(&henry);
+        if(collisionHD[i] == 2 || collisionHG[i] == 2)
+          {
+            up=0;
+            colUp = 1;
+           } 
+      if(colUp == 0) {
+        t+=1;
+        Gravity(&henry,t,0.15);
+      }
     }
-
+    else
+    {
+      t=0;
+    }
 
     /* GRAVITE */
     for(i=0; i<nb_bloc; i++ ) {
@@ -221,7 +230,7 @@ int main(int argc, char** argv) {
     }
     if(colDown == 0) {
         t += 1;
-        Fall(&henry, t);
+        Gravity(&henry, t,0);
         for(i=0; i<nb_bloc; i++ ) { 
          if(CollisionBG(henry,blocs[i]) == 2)  henry.position.y = blocs[i].position.y+blocs[i].taille.y;
          if(CollisionBD(henry,blocs[i]) == 2)  henry.position.y = blocs[i].position.y+blocs[i].taille.y;
