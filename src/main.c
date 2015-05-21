@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
 
             case SDLK_UP:
              for(i=0; i<nb_bloc; i++ ) {
-               if(collisionBD[i] == 2 || collisionBG[i] == 2){
+               if(CollisionBD(henry,blocs[i])==2 || CollisionBG(henry,blocs[i])==2){
                    up=1;
                 }
               } 
