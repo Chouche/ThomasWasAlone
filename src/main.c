@@ -30,27 +30,25 @@ int main(int argc, char** argv) {
   unsigned int windowWidth  = 800;
   unsigned int windowHeight = 600;
 
-  unsigned int nb_bloc = 5;
+  unsigned int nb_bloc = 6;
   int left=0,right=0,up=0, down = 0,direction=0,angle_init, i = 0;
   int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
- 
-
   double t = 0.0;
-
   Bloc blocs[nb_bloc];
 
-  //Initialisation des personnages//
-      Personnage henry = Personnage2D(PointXY(2,2),TailleXY(20,20),ColorRGB(100,100,100));
-      
-
-      blocs[0] = Bloc2D(PointXY(-50,10.),TailleXY(50,50),ColorRGB(250,00,00)); 
-      blocs[1] = Bloc2D(PointXY(50,0),TailleXY(30,30),ColorRGB(250,00,00));
-      blocs[2] = Bloc2D(PointXY(50,50),TailleXY(5,20),ColorRGB(250,00,00));
-      blocs[3] = Bloc2D(PointXY(-100,-10),TailleXY(5,20),ColorRGB(250,00,00));
-      blocs[4] = Bloc2D(PointXY(-10,-50),TailleXY(150,10),ColorRGB(250,00,00));
-
+  /* Initialisation des personnages */
   
+  Personnage henry = Personnage2D(PointXY(2,2),TailleXY(15,15),ColorRGB(255, 0, 127));
 
+  /* Initialisation des blocs du niveau */
+  blocs[0] = Bloc2D(PointXY(-50,10.),TailleXY(35,20),ColorRGB(121,190,219)); 
+  blocs[1] = Bloc2D(PointXY(50,0),TailleXY(30,30),ColorRGB(121,190,219));
+  blocs[2] = Bloc2D(PointXY(50,50),TailleXY(20,20),ColorRGB(121,190,219));
+  blocs[3] = Bloc2D(PointXY(-100,-10),TailleXY(20,20),ColorRGB(121,190,219));
+  blocs[4] = Bloc2D(PointXY(-10,-50),TailleXY(150,20),ColorRGB(121,190,219));
+  blocs[5] = Bloc2D(PointXY(20,-10),TailleXY(20,20),ColorRGB(121,190,219));
+
+  /* Initialisation de la SDL */
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
     return EXIT_FAILURE;
@@ -58,33 +56,24 @@ int main(int argc, char** argv) {
 
   setVideoMode(windowWidth, windowHeight);
 
-  SDL_WM_SetCaption("Clickodrome", NULL);
-
+  SDL_WM_SetCaption("Henry Was Alone", NULL);
+ 
   glPointSize(4);
 
   int loop = 1;
+
   while(loop) {
 
     /* temps au début de la boucle */
     Uint32 startTime = SDL_GetTicks();
 
-    //Initialisation des variables physics
+    /* Initialisation des variables physics */
 
     int colLeft = 0, colRight = 0, colUp = 0, colDown = 0;
 
-    for(i = 0; i < nb_bloc; i++){
-      collisionHG[i] = 0;
-      collisionHD[i] = 0;
-      collisionBG[i] = 0;
-      collisionBD[i] = 0;
-    }
+    InitializeCollision(collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
 
-    for(i = 0; i < nb_bloc; i++) {
-      collisionHG[i] = CollisionHG(henry,blocs[i]);
-      collisionHD[i] = CollisionHD(henry,blocs[i]);
-      collisionBG[i] = CollisionBG(henry,blocs[i]);
-      collisionBD[i] = CollisionBD(henry,blocs[i]);
-    }
+    RechercheCollision(henry, blocs, collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
     
     glClear(GL_COLOR_BUFFER_BIT);
     //Changement de matrice
@@ -92,8 +81,7 @@ int main(int argc, char** argv) {
     //On ecrase la matrice précédente pour lui donner la matrice identité
     glLoadIdentity();
     
-     
-    //Dessin ici :)
+    //Dessin
   
     DessinPersonnageCarre(henry);
 
@@ -102,14 +90,16 @@ int main(int argc, char** argv) {
 
 
     SDL_GL_SwapBuffers();
-    /* ****** */
 
     SDL_Event e;
+
     while(SDL_PollEvent(&e)) {
+
       if(e.type == SDL_QUIT) {
         loop = 0;
         break;
       }
+
       switch(e.type) {
 
         case SDL_VIDEORESIZE:
@@ -136,9 +126,8 @@ int main(int argc, char** argv) {
              for(i=0; i<nb_bloc; i++ ) {
                if(collisionBD[i] == 2 || collisionBG[i] == 2){
                    up=1;
-              }
+                }
               } 
-             
               break;  
 
               case SDLK_DOWN:
@@ -150,7 +139,8 @@ int main(int argc, char** argv) {
               loop = 0;
               break;
             default : break;
-          }
+
+           }
           break;
 
         case SDL_KEYUP:
@@ -158,33 +148,29 @@ int main(int argc, char** argv) {
             
             case SDLK_RIGHT:
               right=0;
-              
-              
+
               break;
 
-            case SDLK_LEFT:
-            
+            case SDLK_LEFT:     
               left=0;
-              
-              
+
               break;
 
             case SDLK_UP:
 
-             
-            
               break;
 
 
             case SDLK_DOWN:
 
-            down = 0;
+              down = 0;
 
-            break;
+              break;
 
             case SDLK_ESCAPE :
               loop = 0;
               break;
+
             default : break;
           }
           break;
@@ -192,10 +178,10 @@ int main(int argc, char** argv) {
         default:
           break;
       }
+
     }
 
-    //Déplacement
-   /* printf("HD: %d\n",collisionHG[0].col );*/
+    /* Déplacement du personnage */
     
     if(left == 1){
       for(i=0; i<nb_bloc; i++ ) 
@@ -209,30 +195,22 @@ int main(int argc, char** argv) {
       if(colRight == 0) MooveRight(&henry);
     }
 
-   
-    
+   /* Gravité */
     Physics(&henry, nb_bloc, blocs, &t, &up);
    
-    if(Dead(&henry)) t=0; 
-
-
-
-
-    /*if(down == 1){
-      for(i=0; i<nb_bloc; i++ ) 
-        if(collisionBD[i] == 2 || collisionBG[i] == 2) colDown = 1;
-      if(colDown == 0) MooveDown(&henry);
-    }*/
+    if(Dead(&henry)) t = 0; 
 
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {
       SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
     }
-  }
+
+  } // Fin de la boucle
 
   SDL_Quit();
 
   return EXIT_SUCCESS;
+
 }
 
 

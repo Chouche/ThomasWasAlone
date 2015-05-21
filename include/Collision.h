@@ -15,6 +15,8 @@ int CollisionHG(Personnage perso, Bloc bloc );
 int CollisionBD(Personnage perso, Bloc bloc );
 int CollisionBG(Personnage perso, Bloc bloc );
 int PosCollision(Personnage perso);
+float DistanceAB(float x1, float y1, float x2, float y2);
+void RechercheCollision(Personnage henry, Bloc* blocs, int* collisionHG, int* collisionBG, int* collisionHD, int* collisionBD, int nb_bloc);
 
 float DistanceAB(float x1, float y1, float x2, float y2);
 #endif
