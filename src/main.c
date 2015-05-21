@@ -279,6 +279,7 @@ int main(int argc, char** argv) {
         }
     }
    
+    if(Dead(&henry)) t=0; 
 
 
 
