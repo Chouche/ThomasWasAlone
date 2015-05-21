@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 
       blocs[0] = Bloc2D(PointXY(-50,10.),TailleXY(50,50),ColorRGB(250,00,00)); 
       blocs[1] = Bloc2D(PointXY(50,0),TailleXY(25,20),ColorRGB(250,00,00));
-      blocs[2] = Bloc2D(PointXY(100,-10),TailleXY(5,20),ColorRGB(250,00,00));
+      blocs[2] = Bloc2D(PointXY(50,50),TailleXY(5,20),ColorRGB(250,00,00));
       blocs[3] = Bloc2D(PointXY(-100,-10),TailleXY(5,20),ColorRGB(250,00,00));
       blocs[4] = Bloc2D(PointXY(-10,-50),TailleXY(150,10),ColorRGB(250,00,00));
 
@@ -133,7 +133,12 @@ int main(int argc, char** argv) {
               break;
 
             case SDLK_UP:
-              up=1;
+             for(i=0; i<nb_bloc; i++ ) {
+               if(collisionBD[i] == 2 || collisionBG[i] == 2){
+                   up=1;
+              }
+              } 
+             
               break;  
 
               case SDLK_DOWN:
@@ -229,51 +234,43 @@ int main(int argc, char** argv) {
         colDown = 1;
         t=0.;
       } 
+      else colDown= 0;
     }
+
     if(colDown == 0) {
         t += 1;
         Gravity(&henry, t,0);
         for(i=0; i<nb_bloc; i++ ) { 
-         if(CollisionBG(henry,blocs[i]) == 2)
+         if(CollisionBG(henry,blocs[i]) == 2 || CollisionBD(henry,blocs[i]) == 2)
          {
-            henry.position.y = blocs[i].position.y+blocs[i].taille.y;
-           
-         }  
-         if(CollisionBD(henry,blocs[i]) == 2){
             henry.position.y = blocs[i].position.y+blocs[i].taille.y;
            
          }  
            
         }
     } 
+    else
+    {
+      t=0.;
+    }
+
     if( colDown = 1 && up == 1) {
-        t += 1;
+        t += 0.5;
          henry.position.y = henry.position.y+5;
-        Gravity(&henry, t,0.05);
+         printf("%f\n",t );
+        Gravity(&henry, t,0.001);
         for(i=0; i<nb_bloc; i++ ) { 
-         if(CollisionBG(henry,blocs[i]) == 2)
+         if(CollisionBG(henry,blocs[i]) == 2 || CollisionBD(henry,blocs[i]) == 2)
          {
             henry.position.y = blocs[i].position.y+blocs[i].taille.y;
             up=0;
            
          }  
-         if(CollisionBD(henry,blocs[i]) == 2)
-         {
-          henry.position.y = blocs[i].position.y+blocs[i].taille.y;
-          up=0;
           
-         }  
-         if(CollisionHD(henry,blocs[i]) == 2)
+         if(CollisionHG(henry,blocs[i]) == 2 || CollisionHD(henry,blocs[i]) == 2)
          {
           henry.position.y = blocs[i].position.y-henry.taille.y;
-          colDown=0;
-          up=0;
-          t=0.;
-         } 
-         if(CollisionHG(henry,blocs[i]) == 2)
-         {
-          henry.position.y = blocs[i].position.y-henry.taille.y;
-          colDown=0;
+          printf("%d\n",i);
           up=0;
           t=0.;
           

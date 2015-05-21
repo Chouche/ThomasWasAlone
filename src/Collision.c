@@ -60,7 +60,7 @@ if(perso.position.x-1 >=  bloc.position.x
 					){
 
 			//Si gauche = 1, le bloc est à droite
-			if(DistanceAB(bloc.position.x+bloc.taille.x,bloc.position.y+bloc.taille.y,perso.position.x,perso.position.y+perso.taille.y) < DistanceAB(bloc.position.x+bloc.taille.x,bloc.position.y+bloc.taille.y,bloc.position.x+bloc.taille.x,bloc.position.y))
+			if(DistanceAB(bloc.position.x,bloc.position.y,perso.position.x,perso.position.y+perso.taille.y) > DistanceAB(bloc.position.x+bloc.taille.x,bloc.position.y,bloc.position.x,bloc.position.y))
 				gauche= 1;
 			//Si le gauche = 2, le bloc est en haut
 			else gauche = 2;
@@ -84,7 +84,7 @@ int CollisionHD(Personnage perso, Bloc bloc ){
 
 
 			//Si droite = 1, le bloc est à droite
-			if(DistanceAB(bloc.position.x,bloc.position.y+bloc.taille.y,perso.position.x+perso.taille.x,perso.position.y+perso.taille.y) < DistanceAB(bloc.position.x,bloc.position.y+bloc.taille.y,bloc.position.x,bloc.position.y))
+			if(DistanceAB(bloc.position.x+bloc.taille.x,bloc.position.y,perso.position.x+perso.taille.x,perso.position.y+perso.taille.y) > DistanceAB(bloc.position.x+bloc.taille.x,bloc.position.y,bloc.position.x,bloc.position.y))
 				droite= 1;
 			//Si le droite = 2, le bloc est en haut
 			else droite = 2;
