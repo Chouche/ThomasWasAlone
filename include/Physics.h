@@ -7,7 +7,10 @@
 #include "Bloc.h"
 
 
-void Gravity(Personnage * perso,int t, float v_init);
+void Gravity(Personnage * perso,double t, float v_init);
 void Fall(Personnage * perso,int t);
+int Dead(Personnage * perso);
+void Physics( Personnage * perso, int nb_bloc, Bloc blocs[],double * t, int * up );
+
 
 #endif
