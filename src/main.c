@@ -215,37 +215,3 @@ int main(int argc, char** argv) {
 
 
 
-
-//if(up==1){
-
-    //   if(left==1||right==1){
-        
-    //      angle_init=M_PI/3;
-    //   }
-    //   else{
-    //       direction=0;
-    //       angle_init=M_PI/2; //permet de sauter droit 
-         
-    //   } 
-      
-
-    //  // Jump(&henry,t,direction,angle_init);
-    //   t+=3;
-      
-    // }
-
-    // if(collisionBD==0 && collisionBG==0){ // Il n'y a PAS de collision
-
-
-    //   if(up==0) Fall(&henry,t);
-      
-    //   if(up==0) t+=3;
-
-    // }else // Il y a une collision
-    // {
-      
-    // //henry.position.y+=PosCollision(henry,bloc2);
-    //   t=0;
-    //   up=0;
-     
-    // }
