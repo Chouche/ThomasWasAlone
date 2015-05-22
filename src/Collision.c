@@ -1,5 +1,5 @@
 #include "../include/Collision.h"
-
+/*
 void InitializeCollision(int* collisionHG, int* collisionBG, int* collisionHD, int* collisionBD, int nb_bloc) {
 	int i;
 
@@ -10,7 +10,7 @@ void InitializeCollision(int* collisionHG, int* collisionBG, int* collisionHD, i
       collisionBD[i] = 0;
     }
 
-}
+}*/
 
 int CollisionBG(Personnage perso, Bloc bloc ){
 
@@ -107,7 +107,7 @@ int CollisionHD(Personnage perso, Bloc bloc ){
 		return 0;
 	}
 }
-
+/*
 void RechercheCollision(Personnage henry, Bloc* blocs, int* collisionHG, int* collisionBG, int* collisionHD, int* collisionBD, int nb_bloc) {
 	int i;
 
@@ -117,7 +117,7 @@ void RechercheCollision(Personnage henry, Bloc* blocs, int* collisionHG, int* co
       collisionBG[i] = CollisionBG(henry,blocs[i]);
       collisionBD[i] = CollisionBD(henry,blocs[i]);
     }
-}
+}*/
 
 float DistanceAB(float x1, float y1, float x2,float y2 )
 {

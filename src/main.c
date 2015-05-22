@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 
   unsigned int nb_bloc = 6;
   int left=0,right=0,up=0, down = 0,direction=0,angle_init, i = 0;
-  int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
+  //int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
   double t = 0.0;
   Bloc blocs[nb_bloc];
 
@@ -71,9 +71,9 @@ int main(int argc, char** argv) {
 
     int colLeft = 0, colRight = 0, colUp = 0, colDown = 0;
 
-    InitializeCollision(collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
+   // InitializeCollision(collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
 
-    RechercheCollision(henry, blocs, collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
+    //RechercheCollision(henry, blocs, collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
     
     glClear(GL_COLOR_BUFFER_BIT);
     //Changement de matrice
@@ -185,13 +185,13 @@ int main(int argc, char** argv) {
     
     if(left == 1){
       for(i=0; i<nb_bloc; i++ ) 
-        if(collisionHG[i] == 1 || collisionBG[i] == 1) colLeft = 1;
+        if(CollisionHG(henry, blocs[i])== 1 || CollisionBG(henry, blocs[i]) == 1) colLeft = 1;
       if(colLeft == 0) MooveLeft(&henry);
     }
 
     if(right == 1){
       for(i=0; i<nb_bloc; i++ ) 
-        if(collisionHD[i] == 1 || collisionBD[i] == 1) colRight = 1;
+        if(CollisionHD(henry, blocs[i]) == 1 || CollisionBD(henry, blocs[i]) == 1) colRight = 1;
       if(colRight == 0) MooveRight(&henry);
     }
 
