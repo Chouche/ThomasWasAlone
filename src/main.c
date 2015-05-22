@@ -38,11 +38,12 @@ int main(int argc, char** argv) {
   //int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
   double t = 0.0;
   Bloc tabBlocs[100];
+  Bloc tabBlocsFinaux[4];
   Personnage tabPerso[4];
+  int currentPerso = 0;
+  int level = 0;
 
-  /*Initialisation des niveaux*/
-  initializeLvl1(tabPerso,tabBlocs,&nb_perso,&nb_bloc);
-     printf("test\n");
+
 
   /* Initialisation de la SDL */
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -55,6 +56,20 @@ int main(int argc, char** argv) {
   SDL_WM_SetCaption("tabPerso[0] Was Alone", NULL);
  
   glPointSize(4);
+
+  BEGGINNING:
+
+  switch(level) {
+
+    case 0: 
+      /*Initialisation des niveaux*/
+      initializeLvl1(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc);
+      break;
+    case 1:
+     initializeLvl2(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc);
+      break;
+
+  }
 
   int loop = 1;
 
@@ -87,11 +102,14 @@ int main(int argc, char** argv) {
     
     //Dessin
   
-    DessinPersonnageCarre(tabPerso[0]);
+    for(i=0; i < nb_perso; i++)
+     DessinPersonnageCarre(tabPerso[i]);
 
     for(i=0; i < nb_bloc; i++) 
-      DessinBlocCarre(tabBlocs[i]);
+      DessinBlocCarre(tabBlocs[i], 1);
 
+    for(i=0; i < nb_perso; i++)
+      DessinBlocCarre(tabBlocsFinaux[i],0);
 
     SDL_GL_SwapBuffers();
 
@@ -128,7 +146,7 @@ int main(int argc, char** argv) {
 
             case SDLK_UP:
              for(i=0; i<nb_bloc; i++ ) {
-               if(CollisionBD(tabPerso[0],tabBlocs[i])==2 || CollisionBG(tabPerso[0],tabBlocs[i])==2){
+               if(CollisionBD(tabPerso[currentPerso],tabBlocs[i])==2 || CollisionBG(tabPerso[currentPerso],tabBlocs[i])==2){
                    up=1;
                 }
               } 
@@ -188,20 +206,29 @@ int main(int argc, char** argv) {
     
     if(left == 1){
       for(i=0; i<nb_bloc; i++ ) 
-        if(CollisionHG(tabPerso[0], tabBlocs[i])== 1 || CollisionBG(tabPerso[0], tabBlocs[i]) == 1) colLeft = 1;
-      if(colLeft == 0) MooveLeft(&tabPerso[0]);
+        if(CollisionHG(tabPerso[currentPerso], tabBlocs[i])== 1 || CollisionBG(tabPerso[currentPerso], tabBlocs[i]) == 1) colLeft = 1;
+      if(colLeft == 0) MooveLeft(&tabPerso[currentPerso]);
     }
 
     if(right == 1){
       for(i=0; i<nb_bloc; i++ ) 
-        if(CollisionHD(tabPerso[0], tabBlocs[i]) == 1 || CollisionBD(tabPerso[0], tabBlocs[i]) == 1) colRight = 1;
-      if(colRight == 0) MooveRight(&tabPerso[0]);
+        if(CollisionHD(tabPerso[currentPerso], tabBlocs[i]) == 1 || CollisionBD(tabPerso[currentPerso], tabBlocs[i]) == 1) colRight = 1;
+      if(colRight == 0) MooveRight(&tabPerso[currentPerso]);
     }
 
+    for(i=0; i < nb_perso; i++)
    /* Gravité */
-    Physics(&tabPerso[0], nb_bloc, tabBlocs, &t, &up);
+    Physics(&tabPerso[i], nb_bloc, tabBlocs, &t, &up, currentPerso);
+
+
+    if(tabPerso[currentPerso].position.x == tabBlocsFinaux[currentPerso].position.x) {
+      printf("C'est gagné ! \n");
+      level++; 
+      goto BEGGINNING;
+    }
+    
    
-    if(Dead(&tabPerso[0])) t = 0; 
+    if(Dead(&tabPerso[currentPerso])) t = 0; 
 
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {

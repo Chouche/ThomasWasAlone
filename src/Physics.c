@@ -16,12 +16,12 @@ void Gravity(Personnage * perso,double t,float v_init){
 }
 
 
-void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],double * t,int * up)
+void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],double * t,int * up, int currentPerso)
 {
 	
-	int i=0,colDown=0,jump=0;
-	
-	/* GRAVITE */
+	 int i=0,colDown=0;
+
+  /* GRAVITE */
   for(i=0; i<nb_bloc; i++ ) {
     if(CollisionBG(*perso,blocs[i]) == 2  || CollisionBD(*perso,blocs[i]) == 2 ){
       
@@ -31,7 +31,7 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],double * t,int * up)
     else colDown= 0;
     if (*up==1)
     {
-    	colDown=1;
+      colDown=1;
     }
   }
 
@@ -42,7 +42,7 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],double * t,int * up)
       Gravity(perso, *t,0);
 
       for(i=0; i<nb_bloc; i++ ) { 
-      	
+        
        if(CollisionBG(*perso,blocs[i]) == 2 || CollisionBD(*perso,blocs[i]) == 2)
        {
           perso->position.y = blocs[i].position.y+blocs[i].taille.y;
@@ -51,13 +51,12 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],double * t,int * up)
          
       }
   } 
-   	
+    
   // Permet de sauter 
-  if(colDown == 1 && *up == 1) {
+  if((colDown == 1) && (*up == 1) && (perso->id == currentPerso)) {
 
     *t += 2;
     perso->position.y = perso->position.y+5;
-    jump=1;
 
     Gravity(perso, *t,0.001);
 
@@ -67,7 +66,6 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],double * t,int * up)
      {
         perso->position.y = blocs[i].position.y+blocs[i].taille.y;
         *up=0;
-        jump=0;
      }  
       
      if(CollisionHG(*perso,blocs[i]) == 2 || CollisionHD(*perso,blocs[i]) == 2)
@@ -75,7 +73,6 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],double * t,int * up)
       perso->position.y = blocs[i].position.y-perso->taille.y;
       *up=0;
       *t=0.;
-      jump=0;
      }  
     }
   } 

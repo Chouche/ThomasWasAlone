@@ -13,6 +13,6 @@ typedef struct {
 
 Bloc Bloc2D(Point2D position, Taille2D taille, Color3f color) ;
 
-void DessinBlocCarre(Bloc bloc);
+void DessinBlocCarre(Bloc bloc, int filled);
 
 #endif

@@ -9,9 +9,10 @@ typedef struct {
     Point2D position;
     Taille2D taille;
     Color3f color;
+    int id;
 } Personnage;
 
-Personnage Personnage2D(Point2D position, Taille2D taille, Color3f color) ;
+Personnage Personnage2D(Point2D position, Taille2D taille, Color3f color, int id) ;
 
 void DessinPersonnageCarre(Personnage perso);
 
