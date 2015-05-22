@@ -37,11 +37,12 @@ int main(int argc, char** argv) {
   int left=0,right=0,up=0, i = 0;
   //int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
   double t = 0.0;
-  Bloc* tabBlocs;
-  Personnage* tabPerso;
+  Bloc tabBlocs[100];
+  Personnage tabPerso[4];
 
   /*Initialisation des niveaux*/
   initializeLvl1(tabPerso,tabBlocs,&nb_perso,&nb_bloc);
+     printf("test\n");
 
   /* Initialisation de la SDL */
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
