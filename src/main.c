@@ -31,23 +31,17 @@ int main(int argc, char** argv) {
   unsigned int windowWidth  = 800;
   unsigned int windowHeight = 600;
 
-  unsigned int nb_bloc = 6;
-  int left=0,right=0,up=0, down = 0,direction=0,angle_init, i = 0;
+
+  int nb_bloc = 0;
+  int nb_perso = 0;
+  int left=0,right=0,up=0, i = 0;
   //int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
   double t = 0.0;
-  Bloc blocs[nb_bloc];
+  Bloc* tabBlocs;
+  Personnage* tabPerso;
 
-  /* Initialisation des personnages */
-  
-  Personnage henry = Personnage2D(PointXY(2,2),TailleXY(15,15),ColorRGB(255, 0, 127));
-
-  /* Initialisation des blocs du niveau */
-  blocs[0] = Bloc2D(PointXY(-50,10.),TailleXY(35,20),ColorRGB(121,190,219)); 
-  blocs[1] = Bloc2D(PointXY(50,0),TailleXY(30,30),ColorRGB(121,190,219));
-  blocs[2] = Bloc2D(PointXY(50,50),TailleXY(20,20),ColorRGB(121,190,219));
-  blocs[3] = Bloc2D(PointXY(-100,-10),TailleXY(20,20),ColorRGB(121,190,219));
-  blocs[4] = Bloc2D(PointXY(-10,-50),TailleXY(150,20),ColorRGB(121,190,219));
-  blocs[5] = Bloc2D(PointXY(20,-10),TailleXY(20,20),ColorRGB(121,190,219));
+  /*Initialisation des niveaux*/
+  initializeLvl1(tabPerso,tabBlocs,&nb_perso,&nb_bloc);
 
   /* Initialisation de la SDL */
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -57,7 +51,7 @@ int main(int argc, char** argv) {
 
   setVideoMode(windowWidth, windowHeight);
 
-  SDL_WM_SetCaption("Henry Was Alone", NULL);
+  SDL_WM_SetCaption("tabPerso[0] Was Alone", NULL);
  
   glPointSize(4);
 
@@ -68,7 +62,7 @@ int main(int argc, char** argv) {
       printf("%s", Mix_GetError());
    }
    Mix_Music *musique; //Création du pointeur de type Mix_Music
-   musique = Mix_LoadMUS("/home/bettina/Documents/Projet_TWA/TWA_BASE/ThomasWasAlone/src/fireflies.mp3"); //Chargement de la musique
+   musique = Mix_LoadMUS("music/music.mp3"); //Chargement de la musique
    Mix_PlayMusic(musique, -1); //Jouer infiniment la musique
 
   while(loop) {
@@ -78,11 +72,11 @@ int main(int argc, char** argv) {
 
     /* Initialisation des variables physics */
 
-    int colLeft = 0, colRight = 0, colUp = 0, colDown = 0;
+    int colLeft = 0, colRight = 0;
 
    // InitializeCollision(collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
 
-    //RechercheCollision(henry, blocs, collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
+    //RechercheCollision(tabPerso[0], tabBlocs, collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
     
     glClear(GL_COLOR_BUFFER_BIT);
     //Changement de matrice
@@ -92,10 +86,10 @@ int main(int argc, char** argv) {
     
     //Dessin
   
-    DessinPersonnageCarre(henry);
+    DessinPersonnageCarre(tabPerso[0]);
 
     for(i=0; i < nb_bloc; i++) 
-      DessinBlocCarre(blocs[i]);
+      DessinBlocCarre(tabBlocs[i]);
 
 
     SDL_GL_SwapBuffers();
@@ -122,25 +116,25 @@ int main(int argc, char** argv) {
             
             case SDLK_RIGHT:
               right=1;
-              direction=1;
+              
 
               break;
 
             case SDLK_LEFT: 
               left=1;
-              direction=-1;
+            
               break;
 
             case SDLK_UP:
              for(i=0; i<nb_bloc; i++ ) {
-               if(CollisionBD(henry,blocs[i])==2 || CollisionBG(henry,blocs[i])==2){
+               if(CollisionBD(tabPerso[0],tabBlocs[i])==2 || CollisionBG(tabPerso[0],tabBlocs[i])==2){
                    up=1;
                 }
               } 
               break;  
 
               case SDLK_DOWN:
-              down = 1;
+              
               break;  
               
 
@@ -171,8 +165,7 @@ int main(int argc, char** argv) {
 
 
             case SDLK_DOWN:
-
-              down = 0;
+             
 
               break;
 
@@ -194,20 +187,20 @@ int main(int argc, char** argv) {
     
     if(left == 1){
       for(i=0; i<nb_bloc; i++ ) 
-        if(CollisionHG(henry, blocs[i])== 1 || CollisionBG(henry, blocs[i]) == 1) colLeft = 1;
-      if(colLeft == 0) MooveLeft(&henry);
+        if(CollisionHG(tabPerso[0], tabBlocs[i])== 1 || CollisionBG(tabPerso[0], tabBlocs[i]) == 1) colLeft = 1;
+      if(colLeft == 0) MooveLeft(&tabPerso[0]);
     }
 
     if(right == 1){
       for(i=0; i<nb_bloc; i++ ) 
-        if(CollisionHD(henry, blocs[i]) == 1 || CollisionBD(henry, blocs[i]) == 1) colRight = 1;
-      if(colRight == 0) MooveRight(&henry);
+        if(CollisionHD(tabPerso[0], tabBlocs[i]) == 1 || CollisionBD(tabPerso[0], tabBlocs[i]) == 1) colRight = 1;
+      if(colRight == 0) MooveRight(&tabPerso[0]);
     }
 
    /* Gravité */
-    Physics(&henry, nb_bloc, blocs, &t, &up);
+    Physics(&tabPerso[0], nb_bloc, tabBlocs, &t, &up);
    
-    if(Dead(&henry)) t = 0; 
+    if(Dead(&tabPerso[0])) t = 0; 
 
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {
