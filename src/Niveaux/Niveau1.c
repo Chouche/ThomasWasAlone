@@ -1,6 +1,5 @@
 #include "../../include/Niveaux/Niveau1.h"
 
-
 void initializeLvl1(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[], int * nb_perso,int * nb_bloc){
 	 
  /* Initialisation des personnages */
@@ -8,7 +7,7 @@ void initializeLvl1(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[
   *nb_perso=1;
 
 
-  tabPerso[0] = Personnage2D(PointXY(2,2),TailleXY(15,15),ColorRGB(255, 0, 127),0);
+  tabPerso[0] = Personnage2D(PointXY(2,2),TailleXY(15,15),ColorRGB(255, 0, 127),0,0.0);
 
 
   /* Initialisation des tabBlocs du niveau */

@@ -6,6 +6,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void initializeLvl1(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[],int * nb_perso,int * nb_bloc);
-
+void initializeLvl2(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[], int * nb_perso,int * nb_bloc);
+	
 #endif

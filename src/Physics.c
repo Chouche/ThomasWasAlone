@@ -7,7 +7,7 @@ static const double g=9.2;
 
 
 
-void Gravity(Personnage * perso,double t,float v_init){
+void Gravity(Personnage * perso,float t,float v_init){
 
 	double v_y = sin(M_PI/2)*v_init;
 
@@ -16,7 +16,7 @@ void Gravity(Personnage * perso,double t,float v_init){
 }
 
 
-void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],double * t,int * up, int currentPerso)
+void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, int currentPerso)
 {
 	
 	 int i=0,colDown=0;

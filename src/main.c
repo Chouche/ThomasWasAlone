@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
   int nb_perso = 0;
   int left=0,right=0,up=0, i = 0;
   //int collisionHG[nb_bloc], collisionBG[nb_bloc], collisionHD[nb_bloc], collisionBD[nb_bloc];
-  double t = 0.0;
+  float t = 0.0;
   Bloc tabBlocs[100];
   Bloc tabBlocsFinaux[4];
   Personnage tabPerso[4];
@@ -57,20 +57,19 @@ int main(int argc, char** argv) {
  
   glPointSize(4);
 
-  BEGGINNING:
+ BEGGINNING:
 
   switch(level) {
 
     case 0: 
-      /*Initialisation des niveaux*/
       initializeLvl1(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc);
       break;
     case 1:
-     initializeLvl2(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc);
+      initializeLvl2(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc);
       break;
 
   }
-
+        
   int loop = 1;
 
   if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) //Initialisation de l'API Mixer
@@ -218,17 +217,17 @@ int main(int argc, char** argv) {
 
     for(i=0; i < nb_perso; i++)
    /* Gravité */
-    Physics(&tabPerso[i], nb_bloc, tabBlocs, &t, &up, currentPerso);
+    Physics(&tabPerso[i], nb_bloc, tabBlocs, &(tabPerso[i].t), &up, currentPerso);
 
 
-    if(tabPerso[currentPerso].position.x == tabBlocsFinaux[currentPerso].position.x) {
+    if(tabPerso[currentPerso].position.x == tabBlocsFinaux[currentPerso].position.x && tabPerso[currentPerso].position.y == tabBlocsFinaux[currentPerso].position.y) {
       printf("C'est gagné ! \n");
       level++; 
       goto BEGGINNING;
     }
     
    
-    if(Dead(&tabPerso[currentPerso])) t = 0; 
+    if(Dead(&tabPerso[currentPerso])) tabPerso[currentPerso].t = 0; 
 
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {
@@ -237,7 +236,7 @@ int main(int argc, char** argv) {
 
   } // Fin de la boucle
 
-     Mix_FreeMusic(musique); //Libération de la musique
+   Mix_FreeMusic(musique); //Libération de la musique
    Mix_CloseAudio(); //Fermeture de l'API
 
   SDL_Quit();

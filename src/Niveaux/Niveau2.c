@@ -8,8 +8,8 @@ void initializeLvl2(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[
   *nb_perso=2;
 
 
-  tabPerso[0] = Personnage2D(PointXY(2,2),TailleXY(15,15),ColorRGB(255, 0, 127),0);
-  tabPerso[1] = Personnage2D(PointXY(60,2),TailleXY(15,30),ColorRGB(255, 102, 0),1);
+  tabPerso[0] = Personnage2D(PointXY(2,2),TailleXY(15,15),ColorRGB(255, 0, 127),0,0.0);
+  tabPerso[1] = Personnage2D(PointXY(60,2),TailleXY(15,30),ColorRGB(255, 102, 0),1,0.0);
 
 
   /* Initialisation des tabBlocs du niveau */

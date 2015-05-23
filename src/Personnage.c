@@ -4,12 +4,13 @@
 
 
 
-Personnage Personnage2D(Point2D position, Taille2D taille, Color3f color, int id) {
+Personnage Personnage2D(Point2D position, Taille2D taille, Color3f color, int id, float t) {
     Personnage p;
     p.position = position;
     p.taille = taille;
     p.color = color;
     p.id = id;
+    p.t = t;
     return p;
 }
 
