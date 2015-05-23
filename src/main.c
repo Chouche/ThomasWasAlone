@@ -42,6 +42,7 @@ int main(int argc, char** argv) {
   Personnage tabPerso[4];
   int currentPerso = 0;
   int level = 0;
+  int gagne = 0;
 
 
 
@@ -155,10 +156,15 @@ int main(int argc, char** argv) {
               
               break;  
               
+            case SDLK_SPACE :
+              if(currentPerso < nb_perso) currentPerso++;
+              if(currentPerso == nb_perso) currentPerso = 0;
+            break;
 
             case SDLK_ESCAPE :
               loop = 0;
               break;
+
             default : break;
 
            }
@@ -219,11 +225,16 @@ int main(int argc, char** argv) {
    /* Gravité */
     Physics(&tabPerso[i], nb_bloc, tabBlocs, &(tabPerso[i].t), &up, currentPerso);
 
-
-    if(tabPerso[currentPerso].position.x == tabBlocsFinaux[currentPerso].position.x && tabPerso[currentPerso].position.y == tabBlocsFinaux[currentPerso].position.y) {
-      printf("C'est gagné ! \n");
-      level++; 
-      goto BEGGINNING;
+    for(i=0; i < nb_perso; i++) {
+      if(tabPerso[i].position.x == tabBlocsFinaux[i].position.x && tabPerso[i].position.y == tabBlocsFinaux[i].position.y) 
+        gagne = 1;
+      else gagne = 0;
+    }
+      
+    if(gagne == 1) {
+        printf("C'est gagné ! \n");
+        level++; 
+        goto BEGGINNING;
     }
     
    

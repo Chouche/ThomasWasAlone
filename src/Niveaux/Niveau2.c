@@ -21,6 +21,7 @@ void initializeLvl2(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[
   tabBlocs[5] = Bloc2D(PointXY(30,-10),TailleXY(20,20),ColorRGB(121,190,219));
 
   tabBlocsFinaux[0] = Bloc2D(PointXY(-95,40),TailleXY(15,15),ColorRGB(255, 0, 127));
+  tabBlocsFinaux[1] = Bloc2D(PointXY(30,10),TailleXY(15,30),ColorRGB(255, 102, 0));
 
 
 }
