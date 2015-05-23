@@ -227,15 +227,15 @@ int main(int argc, char** argv) {
 
     for(i=0; i < nb_perso; i++) {
       if(tabPerso[i].position.x == tabBlocsFinaux[i].position.x && tabPerso[i].position.y == tabBlocsFinaux[i].position.y) 
-        gagne = 1;
-      else gagne = 0;
+        gagne++;
     }
       
-    if(gagne == 1) {
+    if(gagne == nb_perso) {
         printf("C'est gagné ! \n");
         level++; 
         goto BEGGINNING;
     }
+    gagne = 0;
     
    
     if(Dead(&tabPerso[currentPerso])) tabPerso[currentPerso].t = 0; 
