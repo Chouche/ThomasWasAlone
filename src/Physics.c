@@ -38,7 +38,7 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
     // Permet de tomber 
   if(colDown == 0 && *up!=1) {
 
-      *t += 1.5;
+      *t += (perso->id+1.5);
       Gravity(perso, *t,0);
 
       for(i=0; i<nb_bloc; i++ ) { 
@@ -55,7 +55,7 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
   // Permet de sauter 
   if((colDown == 1) && (*up == 1) && (perso->id == currentPerso)) {
 
-    *t += 2;
+    *t += (perso->id + 2);
     perso->position.y = perso->position.y+5;
 
     Gravity(perso, *t,0.001);
