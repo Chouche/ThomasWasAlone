@@ -104,11 +104,25 @@ int main(int argc, char** argv) {
     for(i=0; i < nb_perso; i++)
      DessinPersonnageCarre(tabPerso[i]);
 
-    for(i=0; i < nb_bloc; i++) 
+    for(i=nb_perso; i < nb_bloc; i++) 
       DessinBlocCarre(tabBlocs[i], 1);
 
     for(i=0; i < nb_perso; i++)
       DessinBlocCarre(tabBlocsFinaux[i],0);
+
+
+    for(i=0; i < nb_perso; i++){
+      if(tabPerso[i].id!=currentPerso)
+      {
+        tabBlocs[i].position.x=tabPerso[i].position.x;
+        tabBlocs[i].position.y=tabPerso[i].position.y;
+      }
+      else
+      {
+        tabBlocs[i].position.x=-500;
+        tabBlocs[i].position.y=-500;
+      }
+    }
 
     SDL_GL_SwapBuffers();
 
