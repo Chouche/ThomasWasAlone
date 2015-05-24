@@ -31,7 +31,6 @@ int main(int argc, char** argv) {
   unsigned int windowWidth  = 800;
   unsigned int windowHeight = 600;
 
-
   int nb_bloc = 0;
   int nb_perso = 0;
   int left=0,right=0,up=0, i = 0;
@@ -63,14 +62,14 @@ int main(int argc, char** argv) {
   switch(level) {
 
     case 0: 
-      initializeLvl1(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc);
-      break;
+      initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau1.txt");
+     break;
     case 1:
-      initializeLvl2(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc);
+      initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau2.txt");
       break;
 
   }
-        
+ 
   int loop = 1;
 
   if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) //Initialisation de l'API Mixer
@@ -83,10 +82,10 @@ int main(int argc, char** argv) {
 
   while(loop) {
 
-    /* temps au début de la boucle */
+    // temps au début de la boucle 
     Uint32 startTime = SDL_GetTicks();
 
-    /* Initialisation des variables physics */
+    //Initialisation des variables physics 
 
     int colLeft = 0, colRight = 0;
 
@@ -207,7 +206,7 @@ int main(int argc, char** argv) {
 
     }
 
-    /* Déplacement du personnage */
+    //Déplacement du personnage
     
     if(left == 1){
       for(i=0; i<nb_bloc; i++ ) 
@@ -222,7 +221,7 @@ int main(int argc, char** argv) {
     }
 
     for(i=0; i < nb_perso; i++)
-   /* Gravité */
+   //Gravité 
     Physics(&tabPerso[i], nb_bloc, tabBlocs, &(tabPerso[i].t), &up, currentPerso);
 
     for(i=0; i < nb_perso; i++) {
