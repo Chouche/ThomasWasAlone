@@ -158,6 +158,7 @@ int main(int argc, char** argv) {
             case SDLK_SPACE :
               if(currentPerso < nb_perso) currentPerso++;
               if(currentPerso == nb_perso) currentPerso = 0;
+              up=0;
             break;
 
             case SDLK_ESCAPE :
