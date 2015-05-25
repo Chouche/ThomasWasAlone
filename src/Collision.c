@@ -15,7 +15,7 @@ void InitializeCollision(int* collisionHG, int* collisionBG, int* collisionHD, i
 int CollisionBG(Personnage perso, Bloc bloc ){
 
 	int gauche;
-	if(perso.position.x-1 >=  bloc.position.x
+	if(perso.position.x >=  bloc.position.x
 					&& perso.position.x-1 < bloc.position.x + bloc.taille.x
 					&& perso.position.y-0.5 >= bloc.position.y
 					&& perso.position.y-0.5  <= bloc.position.y + bloc.taille.y
@@ -24,17 +24,28 @@ int CollisionBG(Personnage perso, Bloc bloc ){
 			//Si droite = 1, le bloc est à Gauche
 			if(DistanceAB(bloc.position.x,bloc.position.y+bloc.taille.y,perso.position.x,perso.position.y) > DistanceAB(bloc.position.x,bloc.position.y+bloc.taille.y,bloc.position.x+bloc.taille.x,bloc.position.y+bloc.taille.y))
 				gauche = 1;
-			//Si le droite = 2, le bloc est en haut
+
+			//Si le droite = 2, le bloc est en Bas
 			else gauche = 2;
 
 			return gauche;
 	}
 	else{
+		
 		if (perso.position.x==bloc.position.x+bloc.taille.x && perso.position.y+(perso.taille.y/3) > bloc.position.y && perso.position.y+(perso.taille.y/3) < bloc.position.y+bloc.taille.y)
 		{
-			return 1;
+			gauche = 1;
 		}
-		return 0;
+		if (perso.position.y < bloc.position.y+bloc.taille.y && perso.position.x+(perso.taille.x/3) > bloc.position.x && perso.position.x+(perso.taille.x/3) < bloc.position.x+bloc.taille.x)
+		{
+			gauche = 2;
+		}
+		else
+		{
+			gauche = 0;
+
+		}	
+		return gauche;
 	}
 	
 					
@@ -44,15 +55,15 @@ int CollisionBD(Personnage perso, Bloc bloc ){
 
 int droite;	
 if(perso.position.x+perso.taille.x >=  bloc.position.x
-					&& perso.position.x+perso.taille.x < bloc.position.x + bloc.taille.x
+					&& perso.position.x+perso.taille.x-1 < bloc.position.x + bloc.taille.x
 					&& perso.position.y-0.5 >= bloc.position.y
 					&& perso.position.y-0.5  <= bloc.position.y + bloc.taille.y
 					){
 
-			//Si droite = 1, le bloc est à droite
+			//Si droite = 1, le bloc e*xcd74st à droite
 			if(DistanceAB(bloc.position.x+bloc.taille.x,bloc.position.y+bloc.taille.y,perso.position.x+perso.taille.x,perso.position.y) > DistanceAB(bloc.position.x,bloc.position.y+bloc.taille.y,bloc.position.x+bloc.taille.x,bloc.position.y+bloc.taille.y))
 				droite= 1;
-			//Si le droite = 2, le bloc est en haut
+			//Si le droite = 2, le bloc est en Bas
 			else droite = 2;
 
 			return droite;
@@ -60,11 +71,17 @@ if(perso.position.x+perso.taille.x >=  bloc.position.x
 	}
 
 	else{
+		
 		if (perso.position.x+perso.taille.x==bloc.position.x && perso.position.y+(perso.taille.y/3) > bloc.position.y && perso.position.y+(perso.taille.y/3) < bloc.position.y+bloc.taille.y)
 		{
-			return 1;
+			droite = 1;
 		}
-		return 0;
+		else
+		{
+			droite = 0;
+		}
+		
+		return droite;
 	}
 }
 

@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
   Bloc tabBlocsFinaux[4];
   Personnage tabPerso[4];
   int currentPerso = 0;
-  int level = 0;
+  int level = 1;
   int gagne = 0;
 
 
@@ -82,6 +82,8 @@ int main(int argc, char** argv) {
 
   while(loop) {
 
+     printf("perso%f\n",tabPerso[1].position.x );
+     printf("bloc%f\n",tabBlocs[1].position.x );
     // temps au début de la boucle 
     Uint32 startTime = SDL_GetTicks();
 
@@ -119,8 +121,8 @@ int main(int argc, char** argv) {
       }
       else
       {
-        tabBlocs[i].position.x=-500;
-        tabBlocs[i].position.y=-500;
+        tabBlocs[i].position.x=-5000;
+        tabBlocs[i].position.y=-5000;
       }
     }
 

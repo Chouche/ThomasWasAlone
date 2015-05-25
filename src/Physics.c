@@ -40,7 +40,7 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
 
       *t += (perso->id+1.5);
       Gravity(perso, *t,0);
-
+      
       for(i=0; i<nb_bloc; i++ ) { 
         
        if(CollisionBG(*perso,blocs[i]) == 2 || CollisionBD(*perso,blocs[i]) == 2)
