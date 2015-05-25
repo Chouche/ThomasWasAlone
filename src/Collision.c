@@ -36,10 +36,7 @@ int CollisionBG(Personnage perso, Bloc bloc ){
 		{
 			gauche = 1;
 		}
-		if (perso.position.y==bloc.position.y+bloc.taille.y && perso.position.x+(perso.taille.x/3) > bloc.position.x && perso.position.x+(perso.taille.x/3) < bloc.position.x+bloc.taille.x)
-		{
-			gauche = 2;
-		}
+		
 		else
 		{
 			gauche = 0;
