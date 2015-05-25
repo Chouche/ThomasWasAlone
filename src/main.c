@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
    Mix_PlayMusic(musique, -1); //Jouer infiniment la musique
 
   while(loop) {
-    
+
     // temps au début de la boucle 
     Uint32 startTime = SDL_GetTicks();
 
@@ -112,16 +112,12 @@ int main(int argc, char** argv) {
 
 
     for(i=0; i < nb_perso; i++){
-      if(tabPerso[i].id!=currentPerso)
-      {
+      
+      
         tabBlocs[i].position.x=tabPerso[i].position.x;
         tabBlocs[i].position.y=tabPerso[i].position.y;
-      }
-      else
-      {
-        tabBlocs[i].position.x=-5000;
-        tabBlocs[i].position.y=-5000;
-      }
+      
+      
     }
 
     SDL_GL_SwapBuffers();
@@ -225,13 +221,13 @@ int main(int argc, char** argv) {
     
     if(left == 1){
       for(i=0; i<nb_bloc; i++ ) 
-        if(CollisionHG(tabPerso[currentPerso], tabBlocs[i])== 1 || CollisionBG(tabPerso[currentPerso], tabBlocs[i]) == 1) colLeft = 1;
+        if(CollisionHG(tabPerso[currentPerso], tabBlocs[i])== 1 && i != currentPerso || CollisionBG(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso ) colLeft = 1;
       if(colLeft == 0) MooveLeft(&tabPerso[currentPerso]);
     }
 
     if(right == 1){
       for(i=0; i<nb_bloc; i++ ) 
-        if(CollisionHD(tabPerso[currentPerso], tabBlocs[i]) == 1 || CollisionBD(tabPerso[currentPerso], tabBlocs[i]) == 1) colRight = 1;
+        if(CollisionHD(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso || CollisionBD(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso) colRight = 1;
       if(colRight == 0) MooveRight(&tabPerso[currentPerso]);
     }
 

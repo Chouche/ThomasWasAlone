@@ -23,7 +23,7 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
 
   /* GRAVITE */
   for(i=0; i<nb_bloc; i++ ) {
-    if(CollisionBG(*perso,blocs[i]) == 2  || CollisionBD(*perso,blocs[i]) == 2 ){
+    if(CollisionBG(*perso,blocs[i]) == 2 && i != currentPerso || CollisionBD(*perso,blocs[i]) == 2 && i != currentPerso ){
       
       colDown = 1;
       *t=0.;
@@ -36,14 +36,14 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
   }
 
     // Permet de tomber 
-  if(colDown == 0 && *up!=1) {
+  if(colDown == 0 && *up!=1 ) {
 
       *t += (perso->id+1.5);
       Gravity(perso, *t,0);
-      
+
       for(i=0; i<nb_bloc; i++ ) { 
         
-       if(CollisionBG(*perso,blocs[i]) == 2 || CollisionBD(*perso,blocs[i]) == 2)
+       if(CollisionBG(*perso,blocs[i]) == 2  || CollisionBD(*perso,blocs[i]) == 2 )
        {
           perso->position.y = blocs[i].position.y+blocs[i].taille.y;
           *t=0.;
@@ -62,13 +62,13 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
 
     for(i=0; i<nb_bloc; i++ ) { 
 
-     if(CollisionBG(*perso,blocs[i]) == 2 || CollisionBD(*perso,blocs[i]) == 2)
+     if(CollisionBG(*perso,blocs[i]) == 2 && i != currentPerso || CollisionBD(*perso,blocs[i]) == 2 && i != currentPerso)
      {
         perso->position.y = blocs[i].position.y+blocs[i].taille.y;
         *up=0;
      }  
       
-     if(CollisionHG(*perso,blocs[i]) == 2 || CollisionHD(*perso,blocs[i]) == 2)
+     if(CollisionHG(*perso,blocs[i]) == 2 && i != currentPerso || CollisionHD(*perso,blocs[i]) == 2 && i != currentPerso)
      {
       perso->position.y = blocs[i].position.y-perso->taille.y;
       *up=0;
