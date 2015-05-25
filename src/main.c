@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
   Bloc tabBlocsFinaux[4];
   Personnage tabPerso[4];
   int currentPerso = 0;
-  int level = 1;
+  int level = 0;
   int gagne = 0;
 
 
@@ -81,9 +81,7 @@ int main(int argc, char** argv) {
    Mix_PlayMusic(musique, -1); //Jouer infiniment la musique
 
   while(loop) {
-
-     printf("perso%f\n",tabPerso[1].position.x );
-     printf("bloc%f\n",tabBlocs[1].position.x );
+    
     // temps au début de la boucle 
     Uint32 startTime = SDL_GetTicks();
 
