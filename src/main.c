@@ -104,8 +104,12 @@ int main(int argc, char** argv) {
     for(i=0; i < nb_perso; i++)
      DessinPersonnageCarre(tabPerso[i]);
 
-    for(i=nb_perso; i < nb_bloc; i++) 
+    for(i=nb_perso; i < nb_bloc; i++){
+      {
+        if(tabBlocs[i].id == currentPerso || tabBlocs[i].id == -1)
       DessinBlocCarre(tabBlocs[i], 1);
+    }
+  }
 
     for(i=0; i < nb_perso; i++)
       DessinBlocCarre(tabBlocsFinaux[i],0);

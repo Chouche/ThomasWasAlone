@@ -4,11 +4,12 @@
 
 
 
-Bloc Bloc2D(Point2D position, Taille2D taille, Color3f color) {
+Bloc Bloc2D(Point2D position, Taille2D taille, Color3f color, int id) {
     Bloc b;
     b.position = position;
     b.taille = taille;
     b.color = color;
+    b.id = id;
     return b;
 }
 

@@ -9,16 +9,19 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
   int i=0;
   char* str1;
   float px,py,tx,ty,r,g,b;
+  int id;
 
   fichier = fopen(f, "r+");
 
   if (fichier != NULL) {
+    
 
     fgets(chaine, TAILLE_MAX, fichier);
 
     str1 = strtok(chaine,"\n");
     *nb_perso = atoi(str1);
 
+      printf("str:%s\n",str1 );
     fgets(chaine, TAILLE_MAX, fichier);
     str1 = strtok(chaine,"\n");
     *nb_bloc = atoi(str1);
@@ -26,7 +29,7 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
     fgets(chaine, TAILLE_MAX, fichier);
     str1 = strtok(chaine, "\n");
     for(i = 0; i<*nb_perso; i++) {
-      recupParametres(&px,&py,&tx,&ty,&r,&g,&b,str1);
+      recupParametres(&px,&py,&tx,&ty,&r,&g,&b,&id,str1);
       tabPerso[i] = Personnage2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b),i,0.0);
       fgets(chaine, sizeof(chaine), fichier);
       str1 = strtok(chaine,"\n");
@@ -34,16 +37,16 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
 
     str1 = strtok(chaine,"\n");
     for(i = 0; i<*nb_bloc; i++) {
-      recupParametres(&px,&py,&tx,&ty,&r,&g,&b,str1);
-      tabBlocs[i] = Bloc2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b));
+      recupParametres(&px,&py,&tx,&ty,&r,&g,&b,&id,str1);
+      tabBlocs[i] = Bloc2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b),id);
       fgets(chaine, sizeof(chaine), fichier);
       str1 = strtok(chaine,"\n");
     }
     
     str1 = strtok(chaine, "\n");
     for(i = 0; i<*nb_perso; i++) {
-      recupParametres(&px,&py,&tx,&ty,&r,&g,&b,str1);
-      tabBlocsFinaux[i] = Bloc2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b));
+      recupParametres(&px,&py,&tx,&ty,&r,&g,&b,&id,str1);
+      tabBlocsFinaux[i] = Bloc2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b),id);
       fgets(chaine, sizeof(chaine), fichier);
       str1 = strtok(chaine,"\n");
     }
@@ -54,7 +57,7 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
   }
 }
 
-void recupParametres(float* px, float* py, float* tx, float* ty, float* r, float* g, float* b, char* str1){
+void recupParametres(float* px, float* py, float* tx, float* ty, float* r, float* g, float* b,int* id, char* str1){
     char* str;
 
     str1 = strtok(str1,",");
@@ -64,6 +67,7 @@ void recupParametres(float* px, float* py, float* tx, float* ty, float* r, float
     *ty = atof(str1); str1 = strtok(NULL, ","); 
     *r = atof(str1); str1 = strtok(NULL, ",");
     *g = atof(str1); str1 = strtok(NULL, ",");
-    *b = atof(str1); 
+    *b = atof(str1); str1 = strtok(NULL, ",");
+    *id= atof(str1); 
 
 }

@@ -9,10 +9,10 @@ typedef struct {
     Point2D position;
     Taille2D taille;
     Color3f color;
+    int id;
 } Bloc;
 
-Bloc Bloc2D(Point2D position, Taille2D taille, Color3f color) ;
-
+Bloc Bloc2D(Point2D position, Taille2D taille, Color3f color, int id);
 void DessinBlocCarre(Bloc bloc, int filled);
 
 #endif
