@@ -45,6 +45,7 @@ int main(int argc, char** argv) {
 
 
 
+
   /* Initialisation de la SDL */
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -66,6 +67,8 @@ int main(int argc, char** argv) {
      break;
     case 1:
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau2.txt");
+      glMatrixMode(GL_PROJECTION);
+      glPopMatrix();
       break;
 
   }
@@ -77,7 +80,7 @@ int main(int argc, char** argv) {
       printf("%s", Mix_GetError());
    }
    Mix_Music *musique; //Création du pointeur de type Mix_Music
-   musique = Mix_LoadMUS("music/music.mp3"); //Chargement de la musique
+  // musique = Mix_LoadMUS("music/music.mp3"); //Chargement de la musique
    Mix_PlayMusic(musique, -1); //Jouer infiniment la musique
 
   while(loop) {
@@ -94,11 +97,14 @@ int main(int argc, char** argv) {
     //RechercheCollision(tabPerso[0], tabBlocs, collisionHG, collisionBG, collisionHD, collisionBD, nb_bloc);
     
     glClear(GL_COLOR_BUFFER_BIT);
-    //Changement de matrice
-    glMatrixMode(GL_MODELVIEW);
-    //On ecrase la matrice précédente pour lui donner la matrice identité
+
+    //Caméra 
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
+    gluOrtho2D( tabPerso[currentPerso].position.x - windowWidth / 6.0, tabPerso[currentPerso].position.x + windowWidth /  6.0, tabPerso[currentPerso].position.y - windowHeight / 6.0, tabPerso[currentPerso].position.y + windowHeight / 6.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     //Dessin
     printf("%d\n",nb_perso );
     for(i=0; i < nb_perso; i++)
@@ -255,7 +261,7 @@ int main(int argc, char** argv) {
     Physics(&tabPerso[i], nb_bloc, tabBlocs, &(tabPerso[i].t), &up, currentPerso);
 
     for(i=0; i < nb_perso; i++) {
-      if(tabPerso[i].position.x == tabBlocsFinaux[i].position.x && tabPerso[i].position.y == tabBlocsFinaux[i].position.y) 
+       if( ( tabPerso[i].position.x < tabBlocsFinaux[i].position.x+2 && tabPerso[i].position.x > tabBlocsFinaux[i].position.x-2) && ( tabPerso[i].position.y < tabBlocsFinaux[i].position.y+2 && tabPerso[i].position.y > tabBlocsFinaux[i].position.y-2) )
         gagne++;
     }
       

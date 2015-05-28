@@ -98,8 +98,8 @@ int Dead(Personnage * perso)
 {
 	if(perso->position.y < -2000)
 	{
-		perso->position.y=2;
-		perso->position.x=2;
+		perso->position.y = perso->positionDep.y;
+		perso->position.x = perso->positionDep.x;
 		return 1;
 	}	
 	else return 0;

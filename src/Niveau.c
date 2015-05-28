@@ -30,7 +30,7 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
     str1 = strtok(chaine, "\n");
     for(i = 0; i<*nb_perso; i++) {
       recupParametres(&px,&py,&tx,&ty,&r,&g,&b,&id,str1);
-      tabPerso[i] = Personnage2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b),i,0.0);
+      tabPerso[i] = Personnage2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b),i,0.0,PointXY(px,py));
       fgets(chaine, sizeof(chaine), fichier);
       str1 = strtok(chaine,"\n");
     }
