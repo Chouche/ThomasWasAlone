@@ -100,9 +100,17 @@ int main(int argc, char** argv) {
     glLoadIdentity();
     
     //Dessin
-  
+    printf("%d\n",nb_perso );
     for(i=0; i < nb_perso; i++)
-     DessinPersonnageCarre(tabPerso[i]);
+      if (i==currentPerso)
+      {
+        DessinPersonnageCarre(tabPerso[i]);
+      }
+      else
+      {
+        dessinCarre(1, 126, 126, 126 , tabPerso[i].position.x, tabPerso[i].position.y,tabPerso[i].taille.x, tabPerso[i].taille.y );
+      } 
+      
 
     for(i=nb_perso; i < nb_bloc; i++){
       {
@@ -148,7 +156,6 @@ int main(int argc, char** argv) {
             
             case SDLK_RIGHT:
               right=1;
-              
 
               break;
 
@@ -171,7 +178,7 @@ int main(int argc, char** argv) {
               
             case SDLK_SPACE :
               if(currentPerso < nb_perso) currentPerso++;
-              if(currentPerso == nb_perso) currentPerso = 0;
+              if(currentPerso==nb_perso) currentPerso = 0;
               up=0;
             break;
 
@@ -224,15 +231,23 @@ int main(int argc, char** argv) {
     //Déplacement du personnage
     
     if(left == 1){
-      for(i=0; i<nb_bloc; i++ ) 
+      for(i=0; i<nb_bloc; i++ ) {
         if(CollisionHG(tabPerso[currentPerso], tabBlocs[i])== 1 && i != currentPerso || CollisionBG(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso ) colLeft = 1;
+      }
       if(colLeft == 0) MooveLeft(&tabPerso[currentPerso]);
+   
+
+      
     }
 
     if(right == 1){
-      for(i=0; i<nb_bloc; i++ ) 
+      for(i=0; i<nb_bloc; i++ ) {
         if(CollisionHD(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso || CollisionBD(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso) colRight = 1;
+      }
       if(colRight == 0) MooveRight(&tabPerso[currentPerso]);
+       
+       
+
     }
 
     for(i=0; i < nb_perso; i++)
@@ -252,7 +267,13 @@ int main(int argc, char** argv) {
     gagne = 0;
     
    
-    if(Dead(&tabPerso[currentPerso])) tabPerso[currentPerso].t = 0; 
+    if(Dead(&tabPerso[currentPerso]))
+    {
+      tabPerso[currentPerso].t = 0;
+      glMatrixMode(GL_PROJECTION);
+      glPopMatrix();
+
+    }   
 
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {

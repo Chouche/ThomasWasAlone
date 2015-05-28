@@ -1,10 +1,18 @@
 #include "../include/MoovePerso.h"
 
 void MooveRight(Personnage * perso){
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+    glTranslatef(-1,0,0);
 	perso->position.x=perso->position.x+1;
 }
 
 void MooveLeft(Personnage * perso){
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+    glTranslatef(1,0,0);
 	perso->position.x=perso->position.x-1;
 }
 

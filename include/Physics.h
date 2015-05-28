@@ -5,6 +5,8 @@
 #include "Color3f.h"
 #include "Taille2D.h"
 #include "Bloc.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 
 void Gravity(Personnage * perso,float t, float v_init);

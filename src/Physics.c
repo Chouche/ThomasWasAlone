@@ -11,7 +11,8 @@ void Gravity(Personnage * perso,float t,float v_init){
 
 	double v_y = sin(M_PI/2)*v_init;
 
-  perso->position.y=perso->position.y+((v_y*t)-((g*t*t)/2000));
+  perso->position.y = perso->position.y+((v_y*t)-((g*t*t)/2000));
+
 
 }
 
@@ -20,6 +21,8 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
 {
 	
 	 int i=0,colDown=0;
+  float positionPrec = perso->position.y;
+
 
   /* GRAVITE */
   for(i=0; i<nb_bloc; i++ ) {
@@ -47,9 +50,19 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
        {
           perso->position.y = blocs[i].position.y+blocs[i].taille.y;
           *t=0.;
+         
        }  
+       
          
       }
+
+      
+          
+      glMatrixMode(GL_PROJECTION);
+      glPushMatrix();
+      glTranslatef(0,-(perso->position.y-positionPrec),0);
+       
+      
   } 
     
   // Permet de sauter 
@@ -59,6 +72,9 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
     perso->position.y = perso->position.y+5;
 
     Gravity(perso, *t,0.001);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glTranslatef(0,positionPrec-perso->position.y,0);
 
     for(i=0; i<nb_bloc; i++ ) { 
 
