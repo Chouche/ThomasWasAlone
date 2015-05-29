@@ -14,3 +14,4 @@
 #include "../include/MoovePerso.h"
 #include "../include/Collision.h"
 #include "../include/Niveau.h"
+#include "../include/Menu.h"

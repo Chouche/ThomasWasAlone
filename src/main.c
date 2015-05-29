@@ -98,11 +98,13 @@ int main(int argc, char** argv) {
  BEGGINNING:
 
   switch(level) {
-
-    case 0: 
+    case 0:
+   
+    break;
+    case 1: 
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau1.txt");
      break;
-    case 1:
+    case 2:
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau2.txt");
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
@@ -141,6 +143,11 @@ int main(int argc, char** argv) {
     gluOrtho2D( tabPerso[currentPerso].position.x - windowWidth / 6.0, tabPerso[currentPerso].position.x + windowWidth /  6.0, tabPerso[currentPerso].position.y - windowHeight / 6.0, tabPerso[currentPerso].position.y + windowHeight / 6.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    if (level==0)
+    {
+       DrawMenu();
+    }
 
     //Dessin
     printf("%d\n",nb_perso );
@@ -302,7 +309,7 @@ int main(int argc, char** argv) {
         gagne++;
     }
       
-    if(gagne == nb_perso) {
+    if(gagne == nb_perso && level!=0) {
         printf("C'est gagné ! \n");
         level++; 
         goto BEGGINNING;
