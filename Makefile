@@ -1,8 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -O2 -g
-LDFLAGS = -lSDL -lm -lGLU -lGL -lglut -lSDL_mixer
-
-
+LDFLAGS = -lfmodex64-4.34.05 -lSDL -lm -lGLU -lGL -lglut -lSDL_mixer
 APP_BIN = main
 
 SRC_PATH = src

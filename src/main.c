@@ -1,5 +1,8 @@
 #include "../include/include.h"
 #include <SDL/SDL_mixer.h>
+#include <fmodex/fmod.h>
+#include <fmodex/fmod_errors.h>
+
 
 static const unsigned int BIT_PER_PIXEL = 32;
 static const unsigned int MAX_BLOC = 100;
@@ -24,7 +27,14 @@ void setVideoMode(int winWidth, int winHeight) {
   //SDL_GL_SwapBuffers();
 }
 
-
+void ERRCHECK(FMOD_RESULT result)
+{
+    if (result != FMOD_OK)
+    {
+        printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+        exit(-1);
+    }
+}
 
 int main(int argc, char** argv) {
 
@@ -44,7 +54,34 @@ int main(int argc, char** argv) {
   int gagne = 0;
 
 
+    FMOD_SYSTEM *system;
 
+    FMOD_SOUND *musique;
+
+    FMOD_RESULT resultat;
+
+    
+
+    FMOD_System_Create(&system);
+
+    FMOD_System_Init(system, 1, FMOD_INIT_NORMAL, NULL);
+
+    /* On ouvre la musique */
+
+    resultat = FMOD_System_CreateSound(system, "music/music.mp3", FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
+        /* On vérifie si elle a bien été ouverte (IMPORTANT) */
+    if (resultat != FMOD_OK)
+    {
+        fprintf(stderr, "Impossible de lire le fichier mp3\n");
+        exit(EXIT_FAILURE);
+    }
+
+
+    /* On active la répétition de la musique à l'infini */
+    FMOD_Sound_SetLoopCount(musique, -1);
+
+    /* On joue la musique */
+    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, NULL);
 
   /* Initialisation de la SDL */
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -74,7 +111,7 @@ int main(int argc, char** argv) {
   }
  
   int loop = 1;
-
+/*
   if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) //Initialisation de l'API Mixer
    {
       printf("%s", Mix_GetError());
@@ -82,7 +119,7 @@ int main(int argc, char** argv) {
    Mix_Music *musique; //Création du pointeur de type Mix_Music
   // musique = Mix_LoadMUS("music/music.mp3"); //Chargement de la musique
    Mix_PlayMusic(musique, -1); //Jouer infiniment la musique
-
+*/
   while(loop) {
 
     // temps au début de la boucle 
@@ -288,8 +325,6 @@ int main(int argc, char** argv) {
 
   } // Fin de la boucle
 
-   Mix_FreeMusic(musique); //Libération de la musique
-   Mix_CloseAudio(); //Fermeture de l'API
 
   SDL_Quit();
 

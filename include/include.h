@@ -13,6 +13,4 @@
 #include "../include/Physics.h"
 #include "../include/MoovePerso.h"
 #include "../include/Collision.h"
-#include "../include/Niveaux/Niveau1.h"
-#include "../include/Niveaux/Niveau2.h"
 #include "../include/Niveau.h"
