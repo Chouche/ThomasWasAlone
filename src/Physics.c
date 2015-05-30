@@ -55,13 +55,6 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
        
          
       }
-
-      
-     /*     
-      glMatrixMode(GL_PROJECTION);
-      glPushMatrix();
-      glTranslatef(0,-(perso->position.y-positionPrec),0);
-     */  
       
   } 
     
@@ -72,10 +65,7 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
     perso->position.y = perso->position.y+5;
 
     Gravity(perso, *t,0.001);
-   /* glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glTranslatef(0,positionPrec-perso->position.y,0);
-*/
+
     for(i=0; i<nb_bloc; i++ ) { 
 
      if(CollisionBG(*perso,blocs[i]) == 2 && i != currentPerso || CollisionBD(*perso,blocs[i]) == 2 && i != currentPerso)

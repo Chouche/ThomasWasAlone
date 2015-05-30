@@ -21,7 +21,6 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
     str1 = strtok(chaine,"\n");
     *nb_perso = atoi(str1);
 
-      printf("str:%s\n",str1 );
     fgets(chaine, TAILLE_MAX, fichier);
     str1 = strtok(chaine,"\n");
     *nb_bloc = atoi(str1);

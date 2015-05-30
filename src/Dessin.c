@@ -28,3 +28,38 @@ void dessinCercle(int nbsubdivision, int Filled){
     }
   glEnd();
 }
+
+void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso) {
+
+  int i;
+  int count = -1;
+  int count2 = 0;
+
+  for (i=0; i < 150; i++)
+  {
+          if(currentPerso == 0) glColor4f(105.0, 0.0, 53.0,0.7);
+          if(currentPerso == 1) glColor4f(255.0, 0.0, 0.0,0.7);
+          glBegin(GL_LINES);
+          glVertex3f(count, 0.0, 0.0);
+          glVertex3f(count, spectrum[i]*pow(13,3) + spectrumJump[i]*pow(13,3), 0);
+          glEnd();
+
+          glBegin(GL_LINES);
+          glVertex3f(count2, 0.0, 0.0);
+          glVertex3f(count2, spectrum[i]*pow(13,3) + spectrumJump[i]*pow(13,3), 0);
+          glEnd();
+
+          glBegin(GL_LINES);
+          glVertex3f(count,0.0, 0.0);
+          glVertex3f(count,-spectrum[i]*pow(13,3) - spectrumJump[i]*pow(13,3), 0);
+          glEnd();
+
+          glBegin(GL_LINES);
+          glVertex3f(count2,0.0, 0.0);
+          glVertex3f(count2,-spectrum[i]*pow(13,3) - spectrumJump[i]*pow(13,3), 0);
+          glEnd();
+
+          count ++; 
+          count2 --;     
+  } 
+}
