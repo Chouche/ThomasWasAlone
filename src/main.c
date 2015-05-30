@@ -59,23 +59,34 @@ int main(int argc, char** argv) {
   int level = 0,menu=0;
   int gagne = 0;
   float zoom = 6;
+  int credit = 0;
+  GLuint textureID[10];
 
 
   FMOD_SYSTEM *system;
   FMOD_SOUND *musique;
+  FMOD_SOUND *starwars;
   FMOD_RESULT resultat;
   FMOD_CHANNEL *channel = 0;
   FMOD_CHANNEL *channelJump = 0;
+  FMOD_CHANNEL *channeMenu = 0;
   FMOD_SOUND *jump;
 
     
 
   FMOD_System_Create(&system);
 
-  FMOD_System_Init(system, 2, FMOD_INIT_NORMAL, NULL);
+  FMOD_System_Init(system, 3, FMOD_INIT_NORMAL, NULL);
 
   /* On ouvre la musique */
+  resultat = FMOD_System_CreateSound(system, "music/starwarss.wav", FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &starwars);
+  if (resultat != FMOD_OK)
+  {
+      fprintf(stderr, "Impossible de lire le fichier mp3\n");
+      exit(EXIT_FAILURE);
+  }
 
+  /* On ouvre la musique */
   resultat = FMOD_System_CreateSound(system, "music/music.mp3", FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
       /* On vérifie si elle a bien été ouverte (IMPORTANT) */
   if (resultat != FMOD_OK)
@@ -84,19 +95,12 @@ int main(int argc, char** argv) {
       exit(EXIT_FAILURE);
   }
 
+
   resultat = FMOD_System_CreateSound(system, "music/jump.wav", FMOD_CREATESAMPLE, 0, &jump);
   if (resultat != FMOD_OK) {
    fprintf(stderr, "Impossible de lire pan.wav\n");
    exit(EXIT_FAILURE);
   }
-
-
-  /* On active la répétition de la musique à l'infini */
-  FMOD_Sound_SetLoopCount(musique, -1);
-
-  /* On joue la musique */
-  FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
-  FMOD_System_Update(system);
 
   /* Initialisation de la SDL */
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -112,12 +116,31 @@ int main(int argc, char** argv) {
 
  BEGGINNING:
 
+
+  if(level == 0) {
+    FMOD_Channel_Stop(channel);
+    /* On active la répétition de la musique à l'infini */
+    FMOD_Sound_SetLoopCount(starwars, -1);
+    /* On joue la musique */
+    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, starwars, 0, &channeMenu);
+    FMOD_System_Update(system);
+  }
+
+   if(level == 1 || level == 2) {
+    FMOD_Channel_Stop(channeMenu);
+    /* On active la répétition de la musique à l'infini */
+    FMOD_Sound_SetLoopCount(musique, -1);
+    /* On joue la musique */
+    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
+    FMOD_System_Update(system);
+  }
+
   switch(level) {
     case 0:
-    tabPerso[currentPerso].position.x=0;
-    tabPerso[currentPerso].position.y=0;
-
+      tabPerso[currentPerso].position.x = 0;
+      tabPerso[currentPerso].position.y = 0;
      break;
+
     case 1: 
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau1.txt");
      break;
@@ -126,10 +149,11 @@ int main(int argc, char** argv) {
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
       break;
-
   }
  
   int loop = 1;
+
+  loadTexture("./images/cats-two.jpg", textureID, 1);
 
   while(loop) {
 
@@ -151,12 +175,13 @@ int main(int argc, char** argv) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-
+    if(level == 1 || level == 2) {
     resultat = FMOD_Channel_GetSpectrum(channel, spectrum, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
     if (resultat != FMOD_OK)
     {
         fprintf(stderr, "Impossible de récupérer le spectre\n");
         exit(EXIT_FAILURE);
+    }
     }
     if(up == 1) {
       resultat = FMOD_Channel_GetSpectrum(channelJump, spectrumJump, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
@@ -167,39 +192,42 @@ int main(int argc, char** argv) {
       }
     }
     //Dessin
-   if(level==0){
-      DrawMenu(menu);
-
+   if(level == 0){
+      if(credit == 1) {
+        DrawCredit(windowWidth, windowHeight, textureID);
+      }
+      else DrawMenu(menu);
     }
+
     else
     { 
-    dessinSpectre(spectrum,spectrumJump,currentPerso);
+      dessinSpectre(spectrum,spectrumJump,currentPerso);
 
 
-    for(i=0; i < nb_perso; i++)
-      if (i==currentPerso)
-      {
-        DessinPersonnageCarre(tabPerso[i]);
+      for(i=0; i < nb_perso; i++)
+        if (i==currentPerso)
+        {
+          DessinPersonnageCarre(tabPerso[i]);
+        }
+        else
+        {
+          dessinCarre(1, 126, 126, 126 , tabPerso[i].position.x, tabPerso[i].position.y,tabPerso[i].taille.x, tabPerso[i].taille.y );
+        } 
+        
+
+      for(i=nb_perso; i < nb_bloc; i++){
+        if(tabBlocs[i].id == currentPerso || tabBlocs[i].id == -1)
+          DessinBlocCarre(tabBlocs[i], 1); 
       }
-      else
-      {
-        dessinCarre(1, 126, 126, 126 , tabPerso[i].position.x, tabPerso[i].position.y,tabPerso[i].taille.x, tabPerso[i].taille.y );
-      } 
       
-
-    for(i=nb_perso; i < nb_bloc; i++){
-      if(tabBlocs[i].id == currentPerso || tabBlocs[i].id == -1)
-        DessinBlocCarre(tabBlocs[i], 1); 
-    }
-    
-    for(i=0; i < nb_perso; i++)
-      DessinBlocCarre(tabBlocsFinaux[i],0);
+      for(i=0; i < nb_perso; i++)
+        DessinBlocCarre(tabBlocsFinaux[i],0);
 
 
-    for(i=0; i < nb_perso; i++){
-        tabBlocs[i].position.x=tabPerso[i].position.x;
-        tabBlocs[i].position.y=tabPerso[i].position.y;
-    }
+      for(i=0; i < nb_perso; i++){
+          tabBlocs[i].position.x=tabPerso[i].position.x;
+          tabBlocs[i].position.y=tabPerso[i].position.y;
+      }
   }
     SDL_GL_SwapBuffers();
 
@@ -297,19 +325,25 @@ int main(int argc, char** argv) {
 
             //Touche M//  
             case SDLK_m:
-              level=0;
-              menu=0;
+              level = 0;
+              menu = 0;
               goto BEGGINNING;
               
               break; 
 
             case SDLK_RETURN:
+              credit = 0;
+              printf("credit %d\n",credit );
               if(level==0){
-                if(menu==0){
+                if(menu == 0){
                   level=1;
                   goto BEGGINNING;
-
                 }
+                if(menu == 2) {
+                  credit = 1;
+                  goto BEGGINNING;
+                }
+
                 if(menu==11){
                   level=1;
                   goto BEGGINNING;
@@ -402,7 +436,6 @@ int main(int argc, char** argv) {
     
    for (i = 0; i < nb_perso; i++)
    {
-     /* code */
    
     if(Dead(&tabPerso[i]))
     {

@@ -44,7 +44,6 @@ void DrawMenu(int menu){
 		v3=0;
 		b3=0;
 	}
-	printf("%d\n",menu );
 	dessinCarre(0, r1,  v1, b1 , -130., -40.,80., 80. );
 	dessinCarre(0, r2,  v2, b2 , -40., -40.,80., 80. );
 	dessinCarre(0, r3,  v3, b3 , 50., -40.,80, 80 );
@@ -169,3 +168,4 @@ void DrawMenu(int menu){
 	}
 
 }		
+

@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <SDL/SDL_image.h> 
 
 void DrawMenu(int menu);
 

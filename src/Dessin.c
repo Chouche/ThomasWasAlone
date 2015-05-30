@@ -1,12 +1,4 @@
-#include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-
-#include "../include/Dessin.h"
-#include "../include/include.h"
+#include "Dessin.h"
 
 void dessinCarre(int Filled, float r, float g, float b , float positionX, float positionY,float tailleX, float tailleY ){
   glColor3ub(r, g, b);
@@ -62,4 +54,54 @@ void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso) {
           count ++; 
           count2 --;     
   } 
+}
+
+void DrawCredit(int windowWidth, int windowHeight, GLuint textureID[10]) {
+
+    glEnable(GL_TEXTURE_2D);
+    // FIXME : Bind texture
+    /* Dessin du quad */
+    glColor3ub(50,50,50);
+    glBindTexture(GL_TEXTURE_2D, 1);
+    glBegin(GL_QUADS);
+      glColor3f(1,1,1);
+
+      glTexCoord2f(0, 1);
+      glVertex2f(-150, -100);
+
+      glTexCoord2f(1, 1);
+      glVertex2f(150, -100);
+
+      glTexCoord2f(1, 0);
+      glVertex2f(150, 100);
+
+      glTexCoord2f(0, 0);
+      glVertex2f(-150, 100);
+
+    glEnd();
+
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  glDisable(GL_TEXTURE_2D);
+
+}
+
+void loadTexture(const char* filename, GLuint textureID[10], int numTexture){
+  
+  SDL_Surface* image;
+  image = IMG_Load(filename);
+
+  printf("filename: %s",filename);
+  if(image == NULL){
+    printf("Error : image not found : %s\n", filename);
+  }
+
+  glGenTextures(1, textureID);
+  glBindTexture(GL_TEXTURE_2D, numTexture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+  // TODO : Supprimer les texture lors de la fermeture du prog
+  //glDeleteTextures(10, &textureID);
+  SDL_FreeSurface(image);
 }
