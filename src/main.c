@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
   Bloc tabBlocsFinaux[4];
   Personnage tabPerso[4];
   int currentPerso = 0;
-  int level = 0;
+  int level = 0,menu=0;
   int gagne = 0;
   float zoom = 8;
 
@@ -113,11 +113,15 @@ int main(int argc, char** argv) {
  BEGGINNING:
 
   switch(level) {
+    case 0:
+    tabPerso[currentPerso].position.x=0;
+    tabPerso[currentPerso].position.y=0;
 
-    case 0: 
+     break;
+    case 1: 
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau1.txt");
      break;
-    case 1:
+    case 2:
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau2.txt");
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
@@ -163,8 +167,14 @@ int main(int argc, char** argv) {
       }
     }
     //Dessin
- 
+   if(level==0){
+      DrawMenu(menu);
+
+    }
+    else
+    { 
     dessinSpectre(spectrum,spectrumJump,currentPerso);
+
 
     for(i=0; i < nb_perso; i++)
       if (i==currentPerso)
@@ -190,7 +200,7 @@ int main(int argc, char** argv) {
         tabBlocs[i].position.x=tabPerso[i].position.x;
         tabBlocs[i].position.y=tabPerso[i].position.y;
     }
-
+  }
     SDL_GL_SwapBuffers();
 
     SDL_Event e;
@@ -216,14 +226,37 @@ int main(int argc, char** argv) {
             
             case SDLK_d:
             case SDLK_RIGHT:
-              right=1;
-
+              if(level==0){
+                menu++;
+                if(menu == 3){
+                  menu=0;
+                }
+                if(menu==14)
+                {
+                  menu=11;
+                }
+              }
+              else
+                {  
+                  right=1;
+                }
               break;
 
             case SDLK_q:
             case SDLK_LEFT: 
+             if(level==0){ 
+              menu--;
+              if(menu==-1){
+                menu=2;
+              }
+              if(menu==10){
+                menu=13;
+              }
+            }
+            else
+            {
               left=1;
-            
+            }
               break;
 
             case SDLK_z:
@@ -259,6 +292,36 @@ int main(int argc, char** argv) {
               if(zoom == 8) zoom = 5;
               else zoom = 8;
             break;
+
+            //Touche M//  
+            case SDLK_m:
+              level=0;
+              menu=0;
+              goto BEGGINNING;
+              
+              break; 
+
+            case SDLK_RETURN:
+              if(level==0){
+                if(menu==0){
+                  level=1;
+                  goto BEGGINNING;
+
+                }
+                if(menu==11){
+                  level=1;
+                  goto BEGGINNING;
+                }
+                if(menu==1){
+                  menu=11;
+                }
+                
+                if(menu==12){
+                  level=2;
+                  goto BEGGINNING;
+                }
+              }
+              break;
 
             case SDLK_ESCAPE :
               loop = 0;
@@ -298,7 +361,7 @@ int main(int argc, char** argv) {
     }
 
     //Déplacement du personnage
-    
+    if(level!=0){
     if(left == 1){
       for(i=0; i<nb_bloc; i++ ) {
         if(CollisionHG(tabPerso[currentPerso], tabBlocs[i])== 1 && i != currentPerso || CollisionBG(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso ) colLeft = 1;
@@ -343,7 +406,7 @@ int main(int argc, char** argv) {
       glPopMatrix();
 
     }   
-
+    }
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {
       SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);

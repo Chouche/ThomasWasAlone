@@ -9,6 +9,6 @@
 #include <stdio.h>
 #include <math.h>
 
-DrawMenu();
+void DrawMenu(int menu);
 
 #endif
