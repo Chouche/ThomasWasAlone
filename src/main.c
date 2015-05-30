@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
   int currentPerso = 0;
   int level = 0,menu=0;
   int gagne = 0;
-  float zoom = 6;
+  float zoom = 6,xt=0,yt=0;
   int credit = 0;
   GLuint textureID[10];
 
@@ -238,6 +238,25 @@ int main(int argc, char** argv) {
           }
         }
 
+        if(right==1&&tabPerso[0].position.x<86&&tabPerso[0].position.x>-36)
+          {
+            yt+=0.015;
+            xt+=0.01;
+          }
+        if(left==1&&tabPerso[0].position.x<86&&tabPerso[0].position.x>-36)
+          {
+            yt-=0.015;
+            xt-=0.01;
+          }  
+        printf("%f\n",tabPerso[0].position.x );
+        printf("%f\n",xt);
+        glColor3f(0,0,0);
+        glTranslatef(yt + 24.,-12.5,0.);
+        dessinCercle(10000,1);
+
+        glTranslatef(xt+15.5,0.5,0.);
+        dessinCercle(500,1);
+
 
       }
       else DrawMenu(menu);
@@ -312,6 +331,7 @@ int main(int argc, char** argv) {
                 {  
                   right=1;
                 }
+                if(level==99)right=1;
               break;
 
             case SDLK_q:
@@ -329,6 +349,9 @@ int main(int argc, char** argv) {
             {
               left=1;
             }
+            if(level==99)
+              left=1;
+              
               break;
 
             case SDLK_z:
