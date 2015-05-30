@@ -41,6 +41,9 @@ void ERRCHECK(FMOD_RESULT result)
     }
 }
 
+int rand_a_b(int a, int b){
+    return rand()%(b-a) +a;
+}
 
 
 int main(int argc, char** argv) {
@@ -48,12 +51,13 @@ int main(int argc, char** argv) {
   unsigned int windowWidth  = 800;
   unsigned int windowHeight = 600;
 
-  int nb_bloc = 0;
+  int nb_bloc = 0,nb_pluie=300;
   int nb_perso = 0;
   int left=0,right=0,up=0, i = 0;
   float t = 0.0;
   Bloc tabBlocs[100];
   Bloc tabBlocsFinaux[4];
+  Bloc tabPluie[nb_pluie];
   Personnage tabPerso[4];
   int currentPerso = 0;
   int level = 0,menu=0;
@@ -62,6 +66,10 @@ int main(int argc, char** argv) {
   int credit = 0;
   GLuint textureID[10];
 
+  //init plui
+  for(i=0;i<nb_pluie;i++){
+  tabPluie[i]=Bloc2D(PointXY(rand_a_b(-200,600) ,rand_a_b(300,700)),TailleXY(0.5,rand_a_b(5,20)),ColorRGB(200, 200, 200),50);
+  }
 
   FMOD_SYSTEM *system;
   FMOD_SOUND *musique;
@@ -149,11 +157,16 @@ int main(int argc, char** argv) {
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
       break;
+    case 99:
+      initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/credit.txt");
+      break;   
+
+
   }
  
   int loop = 1;
 
-  loadTexture("./images/cats-two.jpg", textureID, 1);
+  loadTexture("./images/totoro.jpg", textureID, 1);
 
   while(loop) {
 
@@ -171,7 +184,13 @@ int main(int argc, char** argv) {
     //Caméra 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D( tabPerso[currentPerso].position.x - windowWidth / zoom, tabPerso[currentPerso].position.x + windowWidth /  zoom, tabPerso[currentPerso].position.y - windowHeight / zoom, tabPerso[currentPerso].position.y + windowHeight / zoom);
+    if(level==99){
+      gluOrtho2D(-150., 150., -130*(windowHeight/(float)windowWidth), 130*(windowHeight/(float)windowWidth));
+    }   
+    else
+    {  
+      gluOrtho2D( tabPerso[currentPerso].position.x - windowWidth / zoom, tabPerso[currentPerso].position.x + windowWidth /  zoom, tabPerso[currentPerso].position.y - windowHeight / zoom, tabPerso[currentPerso].position.y + windowHeight / zoom);
+    }
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -192,9 +211,34 @@ int main(int argc, char** argv) {
       }
     }
     //Dessin
-   if(level == 0){
+   if(level == 0 || level == 99){
       if(credit == 1) {
-        DrawCredit(windowWidth, windowHeight, textureID);
+        
+      
+      DrawCredit(windowWidth, windowHeight, textureID);
+      
+         for(i=0; i < nb_perso; i++)
+        if (i==currentPerso)
+        {
+          DessinPersonnageCarre(tabPerso[i]);
+        }
+        // for(i=nb_perso; i < nb_bloc; i++){
+        
+        //   DessinBlocCarre(tabBlocs[i], 1); 
+        // }
+        for (i = 0; i < nb_pluie;i++)
+        {
+          DessinBlocCarre(tabPluie[i],1);
+          tabPluie[i].position.y-=5;
+          if (tabPluie[i].position.y<-200)
+          {
+            tabPluie[i].position.y=200;
+            printf("esdsgs\n");
+            
+          }
+        }
+
+        
       }
       else DrawMenu(menu);
     }
@@ -327,6 +371,7 @@ int main(int argc, char** argv) {
             case SDLK_m:
               level = 0;
               menu = 0;
+              credit=0;
               goto BEGGINNING;
               
               break; 
@@ -341,6 +386,7 @@ int main(int argc, char** argv) {
                 }
                 if(menu == 2) {
                   credit = 1;
+                  level=99;
                   goto BEGGINNING;
                 }
 
