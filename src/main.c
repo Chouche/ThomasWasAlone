@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
   int currentPerso = 0;
   int level = 0,menu=0;
   int gagne = 0;
-  float zoom = 8;
+  float zoom = 6;
 
 
   FMOD_SYSTEM *system;
@@ -289,8 +289,8 @@ int main(int argc, char** argv) {
             break;
 
             case SDLK_w:
-              if(zoom == 8) zoom = 5;
-              else zoom = 8;
+              if(zoom == 6) zoom = 4;
+              else zoom = 6;
             break;
 
             //Touche M//  

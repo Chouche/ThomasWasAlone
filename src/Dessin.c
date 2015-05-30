@@ -35,7 +35,7 @@ void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso) {
   int count = -1;
   int count2 = 0;
 
-  for (i=0; i < 150; i++)
+  for (i=0; i < 300; i++)
   {
           if(currentPerso == 0) glColor4f(105.0, 0.0, 53.0,0.7);
           if(currentPerso == 1) glColor4f(255.0, 0.0, 0.0,0.7);
