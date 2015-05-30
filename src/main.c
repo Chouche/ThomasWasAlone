@@ -238,7 +238,7 @@ int main(int argc, char** argv) {
           }
         }
 
-        
+
       }
       else DrawMenu(menu);
     }
@@ -337,11 +337,12 @@ int main(int argc, char** argv) {
              if(level!=0){
              for(i=0; i<nb_bloc; i++ ) {
                if(CollisionBD(tabPerso[currentPerso],tabBlocs[i])==2 || CollisionBG(tabPerso[currentPerso],tabBlocs[i])==2){
+                   FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, jump, 0, &channelJump);
+                   FMOD_System_Update(system);
                    up=1;
                 }
               } 
-              FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, jump, 0, &channelJump);
-              FMOD_System_Update(system);
+           
             }
               break;  
 
