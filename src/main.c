@@ -262,6 +262,7 @@ int main(int argc, char** argv) {
             case SDLK_z:
             case SDLK_SPACE:
             case SDLK_UP:
+             if(level!=0){
              for(i=0; i<nb_bloc; i++ ) {
                if(CollisionBD(tabPerso[currentPerso],tabBlocs[i])==2 || CollisionBG(tabPerso[currentPerso],tabBlocs[i])==2){
                    up=1;
@@ -269,6 +270,7 @@ int main(int argc, char** argv) {
               } 
               FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, jump, 0, &channelJump);
               FMOD_System_Update(system);
+            }
               break;  
 
               case SDLK_DOWN:
@@ -398,14 +400,18 @@ int main(int argc, char** argv) {
     }
     gagne = 0;
     
+   for (i = 0; i < nb_perso; i++)
+   {
+     /* code */
    
-    if(Dead(&tabPerso[currentPerso]))
+    if(Dead(&tabPerso[i]))
     {
-      tabPerso[currentPerso].t = 0;
+      tabPerso[i].t = 0;
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
 
-    }   
+        }   
+      }
     }
     Uint32 elapsedTime = SDL_GetTicks() - startTime;
     if(elapsedTime < FRAMERATE_MILLISECONDS) {
