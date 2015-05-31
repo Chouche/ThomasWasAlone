@@ -425,9 +425,7 @@ int main(int argc, char** argv) {
               break; 
 
             case SDLK_RETURN:
-              
-              if (level!=99)
-              credit=0;
+              credit = 0;
               printf("credit %d\n",credit );
               if(level==0){
                 if(menu == 0){
