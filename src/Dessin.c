@@ -11,6 +11,17 @@ void dessinCarre(int Filled, float r, float g, float b , float positionX, float 
   glEnd();
 }
 
+void dessinOpacity(int Filled, float r, float g, float b , float positionX, float positionY,float tailleX, float tailleY ){
+  glColor4f(r, g, b, 0.5);
+  if(Filled==1) glBegin(GL_QUADS);
+  else glBegin(GL_LINE_LOOP);
+    glVertex2f(positionX, positionY);
+    glVertex2f(positionX+tailleX, positionY);
+    glVertex2f(positionX+tailleX, positionY+tailleY);
+    glVertex2f(positionX, positionY+tailleY);
+  glEnd();
+}
+
 void dessinCercle(int nbsubdivision, int Filled){
   int i;
   if(Filled==1) glBegin(GL_TRIANGLE_FAN);
@@ -21,7 +32,7 @@ void dessinCercle(int nbsubdivision, int Filled){
   glEnd();
 }
 
-void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso) {
+void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso,int up) {
 
   int i;
   int count = -1;
@@ -33,22 +44,26 @@ void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso) {
           if(currentPerso == 1) glColor4f(255.0, 0.0, 0.0,0.7);
           glBegin(GL_LINES);
           glVertex3f(count, 0.0, 0.0);
-          glVertex3f(count, spectrum[i]*pow(13,3) + spectrumJump[i]*pow(13,3), 0);
+          if (up == 1) glVertex3f(count, spectrum[i]*pow(13,3) + spectrumJump[i]*pow(13,3), 0);
+          if (up == 0) glVertex3f(count, spectrum[i]*pow(13,3), 0);
           glEnd();
 
           glBegin(GL_LINES);
           glVertex3f(count2, 0.0, 0.0);
-          glVertex3f(count2, spectrum[i]*pow(13,3) + spectrumJump[i]*pow(13,3), 0);
+          if (up == 1) glVertex3f(count2, spectrum[i]*pow(13,3) + spectrumJump[i]*pow(13,3), 0);
+          if (up == 0) glVertex3f(count2, spectrum[i]*pow(13,3), 0);
           glEnd();
 
           glBegin(GL_LINES);
           glVertex3f(count,0.0, 0.0);
-          glVertex3f(count,-spectrum[i]*pow(13,3) - spectrumJump[i]*pow(13,3), 0);
+          if (up == 1) glVertex3f(count,-spectrum[i]*pow(13,3) - spectrumJump[i]*pow(13,3), 0);
+          if (up == 0) glVertex3f(count,-spectrum[i]*pow(13,3), 0);
           glEnd();
 
           glBegin(GL_LINES);
           glVertex3f(count2,0.0, 0.0);
-          glVertex3f(count2,-spectrum[i]*pow(13,3) - spectrumJump[i]*pow(13,3), 0);
+          if (up == 1) glVertex3f(count2,-spectrum[i]*pow(13,3) - spectrumJump[i]*pow(13,3), 0);
+          if (up == 0) glVertex3f(count2,-spectrum[i]*pow(13,3), 0);
           glEnd();
 
           count ++; 

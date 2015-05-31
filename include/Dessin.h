@@ -14,8 +14,9 @@
 
 
 void dessinCarre(int Filled,float r, float g, float b , float positionX, float positionY,float tailleX, float tailleY );
+void dessinOpacity(int Filled, float r, float g, float b , float positionX, float positionY,float tailleX, float tailleY);
 void dessinCercle(int nbsubdivision, int Filled);
-void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso);
+void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso, int up);
 void loadTexture(const char* filename, GLuint textureID[10], int numTexture);
 void DrawCredit(int windowWidth, int windowHeight, GLuint textureID[10]);
  

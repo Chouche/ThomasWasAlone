@@ -2,8 +2,8 @@
 #include <math.h>
 
 #define SPECTRUMSIZE        8192
-#define ZOOM 8
-#define DEZOOM 5
+#define ZOOM 6
+#define DEZOOM 4
 
 
 static const unsigned int BIT_PER_PIXEL = 32;
@@ -59,13 +59,15 @@ int main(int argc, char** argv) {
   int currentPerso = 0;
   int level = 0,menu=0;
   int gagne = 0;
-  float zoom = ZOOM,xt=0,yt=0;
+  float zoom = ZOOM;
+  float xt=0,yt=0;
   int credit = 0;
   GLuint textureID[10];
 
   FMOD_SYSTEM *system;
   FMOD_SOUND *musique;
   FMOD_SOUND *starwars;
+  FMOD_SOUND *feelgood;
   FMOD_SOUND *totoro;
   FMOD_SOUND *jump;
   FMOD_CHANNEL *channel = 0;
@@ -84,11 +86,12 @@ int main(int argc, char** argv) {
   // Initialisation de FMOD et ouverture des musiques
   FMOD_System_Create(&system);
 
-  FMOD_System_Init(system, 4, FMOD_INIT_NORMAL, NULL);
+  FMOD_System_Init(system, 5, FMOD_INIT_NORMAL, NULL);
 
   starwars = OuvrirMusique("music/starwarss.wav",starwars,system);
   musique = OuvrirMusique("music/music.mp3",musique,system);
   totoro = OuvrirMusique("music/totoro.mp3",totoro,system);
+  feelgood = OuvrirMusique("music/feelgood.mp3",feelgood,system);
   jump = OuvrirMusique("music/jump.wav",jump,system);
 
   /// Initialisation de la SDL 
@@ -122,7 +125,8 @@ int main(int argc, char** argv) {
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/credit.txt");
       break;   
   }
- 
+  
+  currentPerso = 0;
   int loop = 1;
   if(level != 0) zoom = ZOOM;
 
@@ -134,8 +138,13 @@ int main(int argc, char** argv) {
   if(level == 0) 
     channeMenu = JouerMusique(system,channel,channeMenu,starwars);
 
-  if(level == 1 || level == 2) 
-    channel = JouerMusique(system,channeMenu,channel,musique);
+  if(level == 1 ) 
+    channel = JouerMusique(system,channeMenu,channel,feelgood);
+
+  if(level == 2 ) {
+    FMOD_Channel_Stop(channeMenu);
+    channel = JouerMusique(system,channel,channel,musique);
+  }
   
   if (level==99)
     channel = JouerMusique(system,channeMenu,channel,totoro);
@@ -152,7 +161,7 @@ int main(int argc, char** argv) {
     int colLeft = 0, colRight = 0;
 
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(255.0, 231.0, 222.0, 255.0);
+    glClearColor(1, 1, 1, 1);
 
     //Caméra 
     glMatrixMode(GL_PROJECTION);
@@ -239,8 +248,11 @@ int main(int argc, char** argv) {
       if(level == 1) {
       }
 
-      dessinSpectre(spectrum,spectrumJump,currentPerso);
+      dessinSpectre(spectrum,spectrumJump,currentPerso,up);
 
+      for(i=0; i < nb_perso; i++) {
+        dessinOpacity(1, tabBlocsFinaux[i].color.r, tabBlocsFinaux[i].color.g, tabBlocsFinaux[i].color.b, tabBlocsFinaux[i].position.x, tabBlocsFinaux[i].position.y,tabBlocsFinaux[i].taille.x,tabBlocsFinaux[i].taille.y);
+      }
 
       for(i=0; i < nb_perso; i++)
         if (i==currentPerso)
@@ -257,9 +269,6 @@ int main(int argc, char** argv) {
         if(tabBlocs[i].id == currentPerso || tabBlocs[i].id == -1)
           DessinBlocCarre(tabBlocs[i], 1); 
       }
-      
-      for(i=0; i < nb_perso; i++)
-        DessinBlocCarre(tabBlocsFinaux[i],0);
 
 
       for(i=0; i < nb_perso; i++){
@@ -381,8 +390,7 @@ int main(int argc, char** argv) {
               break; 
 
             case SDLK_RETURN:
-              credit = 0;
-              printf("credit %d\n",credit );
+              if(level !=99) credit = 0;
               if(level==0){
                 if(menu == 0){
                   level=1;

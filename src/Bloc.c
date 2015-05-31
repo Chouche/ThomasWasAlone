@@ -15,6 +15,6 @@ Bloc Bloc2D(Point2D position, Taille2D taille, Color3f color, int id) {
 
 
 void DessinBlocCarre(Bloc bloc, int filled){
-	dessinCarre(filled,bloc.color.r,bloc.color.g,bloc.color.b,bloc.position.x,bloc.position.y,bloc.taille.x,bloc.taille.y);
+	dessinCarre(filled,bloc.color.r,bloc.color.g,bloc.color.b, bloc.position.x,bloc.position.y,bloc.taille.x,bloc.taille.y);
 }
 
