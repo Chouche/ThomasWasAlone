@@ -1,12 +1,9 @@
 #include "../include/include.h"
-#include <SDL/SDL_mixer.h>
-#include <fmodex/fmod.h>
-#include <fmodex/fmod_errors.h>
 #include <math.h>
 
 #define SPECTRUMSIZE        8192
-#define SPECTRUMRANGE       ((float)OUTPUTRATE / 2.0f) 
-#define BINSIZE      (SPECTRUMRANGE / (float)SPECTRUMSIZE)
+#define ZOOM 8
+#define DEZOOM 5
 
 
 static const unsigned int BIT_PER_PIXEL = 32;
@@ -62,132 +59,88 @@ int main(int argc, char** argv) {
   int currentPerso = 0;
   int level = 0,menu=0;
   int gagne = 0;
-  float zoom = 6,xt=0,yt=0;
+  float zoom = ZOOM,xt=0,yt=0;
   int credit = 0;
   GLuint textureID[10];
-
-  //init plui
-  for(i=0;i<nb_pluie;i++){
-  tabPluie[i]=Bloc2D(PointXY(rand_a_b(-200,600) ,rand_a_b(300,700)),TailleXY(0.5,rand_a_b(5,20)),ColorRGB(200, 200, 200),50);
-  }
 
   FMOD_SYSTEM *system;
   FMOD_SOUND *musique;
   FMOD_SOUND *starwars;
-  FMOD_RESULT resultat;
+  FMOD_SOUND *totoro;
+  FMOD_SOUND *jump;
   FMOD_CHANNEL *channel = 0;
   FMOD_CHANNEL *channelJump = 0;
   FMOD_CHANNEL *channeMenu = 0;
   FMOD_CHANNEL *channeCredit = 0;
+  FMOD_RESULT resultat;
 
-  FMOD_SOUND *jump;
+
+    //init pluie
+  for(i=0;i<nb_pluie;i++){
+  tabPluie[i]=Bloc2D(PointXY(rand_a_b(-200,600) ,rand_a_b(300,700)),TailleXY(0.5,rand_a_b(5,20)),ColorRGB(200, 200, 200),50);
+  }
 
     
-
+  // Initialisation de FMOD et ouverture des musiques
   FMOD_System_Create(&system);
 
-  FMOD_System_Init(system, 3, FMOD_INIT_NORMAL, NULL);
+  FMOD_System_Init(system, 4, FMOD_INIT_NORMAL, NULL);
 
-  /* On ouvre la musique */
-  resultat = FMOD_System_CreateSound(system, "music/starwarss.wav", FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &starwars);
-  if (resultat != FMOD_OK)
-  {
-      fprintf(stderr, "Impossible de lire le fichier mp3\n");
-      exit(EXIT_FAILURE);
-  }
+  starwars = OuvrirMusique("music/starwarss.wav",starwars,system);
+  musique = OuvrirMusique("music/music.mp3",musique,system);
+  totoro = OuvrirMusique("music/totoro.mp3",totoro,system);
+  jump = OuvrirMusique("music/jump.wav",jump,system);
 
-  /* On ouvre la musique */
-  resultat = FMOD_System_CreateSound(system, "music/music.mp3", FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
-      /* On vérifie si elle a bien été ouverte (IMPORTANT) */
-  if (resultat != FMOD_OK)
-  {
-      fprintf(stderr, "Impossible de lire le fichier mp3\n");
-      exit(EXIT_FAILURE);
-  }
-
-  /* On ouvre la musique */
-  resultat = FMOD_System_CreateSound(system, "music/totoro.mp3", FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
-      /* On vérifie si elle a bien été ouverte (IMPORTANT) */
-  if (resultat != FMOD_OK)
-  {
-      fprintf(stderr, "Impossible de lire le fichier mp3\n");
-      exit(EXIT_FAILURE);
-  }
-
-  resultat = FMOD_System_CreateSound(system, "music/jump.wav", FMOD_CREATESAMPLE, 0, &jump);
-  if (resultat != FMOD_OK) {
-   fprintf(stderr, "Impossible de lire pan.wav\n");
-   exit(EXIT_FAILURE);
-  }
-
-  /* Initialisation de la SDL */
+  /// Initialisation de la SDL 
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
     return EXIT_FAILURE;
   }
-
   setVideoMode(windowWidth, windowHeight);
 
   SDL_WM_SetCaption("tabPerso[0] Was Alone", NULL);
  
   glPointSize(4);
 
+ // Début du niveau ou menu
  BEGGINNING:
-
-
-  if(level == 0) {
-    FMOD_Channel_Stop(channel);
-    /* On active la répétition de la musique à l'infini */
-    FMOD_Sound_SetLoopCount(starwars, -1);
-    /* On joue la musique */
-    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, starwars, 0, &channeMenu);
-    FMOD_System_Update(system);
-  }
-
-   if(level == 1 || level == 2) {
-    FMOD_Channel_Stop(channeMenu);
-    /* On active la répétition de la musique à l'infini */
-    FMOD_Sound_SetLoopCount(musique, -1);
-    /* On joue la musique */
-    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
-    FMOD_System_Update(system);
-  }
-
-  if (level==99)
-  {
-    FMOD_Channel_Stop(channeMenu);
-    /* On active la répétition de la musique à l'infini */
-    FMOD_Sound_SetLoopCount(musique, -1);
-    /* On joue la musique */
-    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
-    FMOD_System_Update(system);
-  }
-
+  
+  //Initialisation des niveaux
   switch(level) {
     case 0:
+      zoom = 6;
       tabPerso[currentPerso].position.x = 0;
       tabPerso[currentPerso].position.y = 0;
      break;
-
     case 1: 
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau1.txt");
      break;
     case 2:
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau2.txt");
-      glMatrixMode(GL_PROJECTION);
-      glPopMatrix();
       break;
     case 99:
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/credit.txt");
       break;   
-
-
   }
  
   int loop = 1;
+  if(level != 0) zoom = ZOOM;
 
+  // Initialisation des textures
   loadTexture("./images/totoro.jpg", textureID, 1);
+  //loadTexture("./images/lvl1.jpg", textureID, 2);
 
+    // Play music
+  if(level == 0) 
+    channeMenu = JouerMusique(system,channel,channeMenu,starwars);
+
+  if(level == 1 || level == 2) 
+    channel = JouerMusique(system,channeMenu,channel,musique);
+  
+  if (level==99)
+    channel = JouerMusique(system,channeMenu,channel,totoro);
+
+  // Boucle
   while(loop) {
 
     float spectrum[SPECTRUMSIZE];
@@ -214,13 +167,14 @@ int main(int argc, char** argv) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    // Récupération du spectre
     if(level == 1 || level == 2) {
-    resultat = FMOD_Channel_GetSpectrum(channel, spectrum, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
-    if (resultat != FMOD_OK)
-    {
-        fprintf(stderr, "Impossible de récupérer le spectre\n");
-        exit(EXIT_FAILURE);
-    }
+      resultat = FMOD_Channel_GetSpectrum(channel, spectrum, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
+      if (resultat != FMOD_OK)
+      {
+          fprintf(stderr, "Impossible de récupérer le spectre\n");
+          exit(EXIT_FAILURE);
+      }
     }
     if(up == 1 && level !=99) {
       resultat = FMOD_Channel_GetSpectrum(channelJump, spectrumJump, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
@@ -230,6 +184,7 @@ int main(int argc, char** argv) {
           exit(EXIT_FAILURE);
       }
     }
+
     //Dessin
    if(level == 0 || level == 99){
       if(credit == 1) {
@@ -237,15 +192,11 @@ int main(int argc, char** argv) {
       
       DrawCredit(windowWidth, windowHeight, textureID);
       
-         for(i=0; i < nb_perso; i++)
+        for(i=0; i < nb_perso; i++)
         if (i==currentPerso)
         {
           DessinPersonnageCarre(tabPerso[i]);
         }
-        // for(i=nb_perso; i < nb_bloc; i++){
-        
-        //   DessinBlocCarre(tabBlocs[i], 1); 
-        // }
         for (i = 0; i < nb_pluie;i++)
         {
           DessinBlocCarre(tabPluie[i],1);
@@ -284,6 +235,10 @@ int main(int argc, char** argv) {
 
     else
     { 
+
+      if(level == 1) {
+      }
+
       dessinSpectre(spectrum,spectrumJump,currentPerso);
 
 
@@ -385,7 +340,7 @@ int main(int argc, char** argv) {
                    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, jump, 0, &channelJump);
 
                    }
-                                      FMOD_System_Update(system);
+                   FMOD_System_Update(system);
                    up=1;
                 }
               } 
@@ -411,8 +366,9 @@ int main(int argc, char** argv) {
             break;
 
             case SDLK_w:
-              if(zoom == 6) zoom = 4;
-              else zoom = 6;
+              if(level != 0)
+                if(zoom == ZOOM) zoom = DEZOOM;
+                else zoom = ZOOM;
             break;
 
             //Touche M//  

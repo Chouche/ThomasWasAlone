@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <fmodex/fmod.h>
+#include <fmodex/fmod_errors.h>
 #include "../include/Personnage.h"
 #include "../include/Taille2D.h"
 #include "../include/Dessin.h"
@@ -15,3 +17,4 @@
 #include "../include/Collision.h"
 #include "../include/Niveau.h"
 #include "../include/Menu.h"
+#include "../include/Music.h"
