@@ -78,6 +78,8 @@ int main(int argc, char** argv) {
   FMOD_CHANNEL *channel = 0;
   FMOD_CHANNEL *channelJump = 0;
   FMOD_CHANNEL *channeMenu = 0;
+  FMOD_CHANNEL *channeCredit = 0;
+
   FMOD_SOUND *jump;
 
     
@@ -103,6 +105,14 @@ int main(int argc, char** argv) {
       exit(EXIT_FAILURE);
   }
 
+  /* On ouvre la musique */
+  resultat = FMOD_System_CreateSound(system, "music/totoro.mp3", FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
+      /* On vérifie si elle a bien été ouverte (IMPORTANT) */
+  if (resultat != FMOD_OK)
+  {
+      fprintf(stderr, "Impossible de lire le fichier mp3\n");
+      exit(EXIT_FAILURE);
+  }
 
   resultat = FMOD_System_CreateSound(system, "music/jump.wav", FMOD_CREATESAMPLE, 0, &jump);
   if (resultat != FMOD_OK) {
@@ -135,6 +145,16 @@ int main(int argc, char** argv) {
   }
 
    if(level == 1 || level == 2) {
+    FMOD_Channel_Stop(channeMenu);
+    /* On active la répétition de la musique à l'infini */
+    FMOD_Sound_SetLoopCount(musique, -1);
+    /* On joue la musique */
+    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
+    FMOD_System_Update(system);
+  }
+
+  if (level==99)
+  {
     FMOD_Channel_Stop(channeMenu);
     /* On active la répétition de la musique à l'infini */
     FMOD_Sound_SetLoopCount(musique, -1);
@@ -202,7 +222,7 @@ int main(int argc, char** argv) {
         exit(EXIT_FAILURE);
     }
     }
-    if(up == 1) {
+    if(up == 1 && level !=99) {
       resultat = FMOD_Channel_GetSpectrum(channelJump, spectrumJump, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
       if (resultat != FMOD_OK)
       {
@@ -360,8 +380,12 @@ int main(int argc, char** argv) {
              if(level!=0){
              for(i=0; i<nb_bloc; i++ ) {
                if(CollisionBD(tabPerso[currentPerso],tabBlocs[i])==2 || CollisionBG(tabPerso[currentPerso],tabBlocs[i])==2){
+                   if(level != 99)
+                   {
                    FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, jump, 0, &channelJump);
-                   FMOD_System_Update(system);
+
+                   }
+                                      FMOD_System_Update(system);
                    up=1;
                 }
               } 
