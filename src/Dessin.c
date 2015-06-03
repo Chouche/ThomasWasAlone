@@ -77,7 +77,7 @@ void DrawCredit(int windowWidth, int windowHeight, GLuint textureID[10]) {
     // FIXME : Bind texture
     /* Dessin du quad */
     glColor3ub(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, 1);
+    glBindTexture(GL_TEXTURE_2D, 2);
     glBegin(GL_QUADS);
       glColor3f(1,1,1);
 

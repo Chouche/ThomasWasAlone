@@ -132,7 +132,8 @@ int main(int argc, char** argv) {
 
   // Initialisation des textures
   loadTexture("./images/totoro.jpg", textureID, 1);
-  //loadTexture("./images/lvl1.jpg", textureID, 2);
+  loadTexture("./images/henry.jpg", textureID, 2);
+  loadTexture("./images/was.jpg", textureID, 3);
 
     // Play music
   if(level == 0) 
@@ -207,7 +208,7 @@ int main(int argc, char** argv) {
 
         
       }
-      else DrawMenu(menu);
+      else DrawMenu(menu,textureID);
     }
 
     else
@@ -238,7 +239,7 @@ int main(int argc, char** argv) {
           DessinBlocCarre(tabBlocs[i], 1); 
       }
 
-
+      //Bloc du perso suis le perso
       for(i=0; i < nb_perso; i++){
           tabBlocs[i].position.x=tabPerso[i].position.x;
           tabBlocs[i].position.y=tabPerso[i].position.y;

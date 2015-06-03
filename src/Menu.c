@@ -1,6 +1,6 @@
 #include "../include/Menu.h"
 
-void DrawMenu(int menu){
+void DrawMenu(int menu,GLuint textureID[10]){
 	int r1,r2,r3,v1,v2,v3,b1,b2,b3;
 	//carrée pour tout effacer 
 	dessinCarre(1, 255,  255, 255 , -500, -500.,5000., 5000. );
@@ -167,5 +167,33 @@ void DrawMenu(int menu){
 		dessinCarre(1,r3,v3,b3,80,-5,20,10);
 	}
 
+
+
+	glEnable(GL_TEXTURE_2D);
+    // FIXME : Bind texture
+    /* Dessin du quad */
+    glColor3ub(50,50,50);
+    glBindTexture(GL_TEXTURE_2D, 1);
+    glBegin(GL_QUADS);
+      glColor3f(1,1,1);
+
+      glTexCoord2f(0, 1);
+      glVertex2f(-150, -100);
+
+      glTexCoord2f(1, 1);
+      glVertex2f(150, -100);
+
+      glTexCoord2f(1, 0);
+      glVertex2f(150, 100);
+
+      glTexCoord2f(0, 0);
+      glVertex2f(-150, 100);
+
+    glEnd();
+
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  glDisable(GL_TEXTURE_2D);
 }		
 
