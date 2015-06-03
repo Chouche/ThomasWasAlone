@@ -18,3 +18,4 @@
 #include "../include/Niveau.h"
 #include "../include/Menu.h"
 #include "../include/Music.h"
+#include "../include/Credit.h"

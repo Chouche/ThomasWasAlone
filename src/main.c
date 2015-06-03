@@ -166,6 +166,7 @@ int main(int argc, char** argv) {
     //Caméra 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+    // Level 99 = credit
     if(level==99){
       gluOrtho2D(-150., 150., -130*(windowHeight/(float)windowWidth), 130*(windowHeight/(float)windowWidth));
     }   
@@ -198,46 +199,13 @@ int main(int argc, char** argv) {
    if(level == 0 || level == 99){
       if(credit == 1) {
         
-      
+      //Page crédit
       DrawCredit(windowWidth, windowHeight, textureID);
-      
-        for(i=0; i < nb_perso; i++)
-        if (i==currentPerso)
-        {
-          DessinPersonnageCarre(tabPerso[i]);
-        }
-        for (i = 0; i < nb_pluie;i++)
-        {
-          DessinBlocCarre(tabPluie[i],1);
-          tabPluie[i].position.y-=5;
-          if (tabPluie[i].position.y<-200)
-          {
-            tabPluie[i].position.y=200;
-            printf("esdsgs\n");
-            
-          }
-        }
+      DessinPersoPluie(nb_perso,nb_pluie,currentPerso,tabPerso,tabPluie);
+      MooveYeuxTotoro(right,left,&yt,&xt,tabPerso);
+      DessinYeuxTotoro(yt, xt);
 
-        if(right==1&&tabPerso[0].position.x<86&&tabPerso[0].position.x>-36)
-          {
-            yt+=0.015;
-            xt+=0.01;
-          }
-        if(left==1&&tabPerso[0].position.x<86&&tabPerso[0].position.x>-36)
-          {
-            yt-=0.015;
-            xt-=0.01;
-          }  
-        printf("%f\n",tabPerso[0].position.x );
-        printf("%f\n",xt);
-        glColor3f(0,0,0);
-        glTranslatef(yt + 24.,-12.5,0.);
-        dessinCercle(10000,1);
-
-        glTranslatef(xt+15.5,0.5,0.);
-        dessinCercle(500,1);
-
-
+        
       }
       else DrawMenu(menu);
     }
