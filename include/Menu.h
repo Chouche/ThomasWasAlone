@@ -9,7 +9,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <SDL/SDL_image.h> 
+#include <time.h>
 
-void DrawMenu(int menu,GLuint textureID[10],int windowWidth, int windowHeight);
-
+void DrawMenu(int menu,GLuint textureID[380],int windowWidth, int windowHeight);
+void DrawIntro(int * img, int * intro);
 #endif

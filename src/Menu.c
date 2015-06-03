@@ -1,8 +1,7 @@
 #include "../include/Menu.h"
 
-void DrawMenu(int menu,GLuint textureID[10],int windowWidth, int windowHeight){
+void DrawMenu(int menu,GLuint textureID[380],int windowWidth, int windowHeight){
 	int r1,r2,r3,v1,v2,v3,b1,b2,b3;
-	//carrée pour tout effacer 
 	dessinCarre(1, 255,  255, 255 , -500, -500.,5000., 5000. );
 	if(menu==0||menu==11){
 		r1=0;
@@ -224,5 +223,44 @@ void DrawMenu(int menu,GLuint textureID[10],int windowWidth, int windowHeight){
   glDisable(GL_TEXTURE_2D);
 
 
-}		
+}
 
+
+void DrawIntro(int * img, int * intro){
+	int i,g;
+	//carrée pour tout effacer 
+	glEnable(GL_TEXTURE_2D);
+    // FIXME : Bind texture
+    /* Dessin du quad */
+    glColor3ub(50,50,50);
+    glBindTexture(GL_TEXTURE_2D, *img);
+    glBegin(GL_QUADS);
+      glColor3f(1,1,1);
+
+      glTexCoord2f(0, 1);
+      glVertex2f(-150, -100);
+
+      glTexCoord2f(1, 1);
+      glVertex2f(150, -100);
+
+      glTexCoord2f(1, 0);
+      glVertex2f(150, 100);
+
+      glTexCoord2f(0, 0);
+      glVertex2f(-150, 100);
+
+    glEnd();
+
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  glDisable(GL_TEXTURE_2D);
+  *img=*img+1;
+  
+if (*img==371)
+{
+	*intro=*intro+4;
+
+}
+	printf("%d\n",*intro );
+}

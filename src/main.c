@@ -58,11 +58,18 @@ int main(int argc, char** argv) {
   Personnage tabPerso[4];
   int currentPerso = 0;
   int level = 0,menu=0;
+  int intro = 1;
   int gagne = 0;
   float zoom = ZOOM;
   float xt=0,yt=0;
-  int credit = 0;
-  GLuint textureID[10];
+  int credit = 0, img=4;
+  GLuint textureID[380];
+  int tempo, tempo_max=500;
+  char str[50];
+  char str1[50];
+  struct timespec tim, tim2;
+  tim.tv_sec  = 0;
+  tim.tv_nsec = 40000000L;
 
   FMOD_SYSTEM *system;
   FMOD_SOUND *musique;
@@ -70,6 +77,8 @@ int main(int argc, char** argv) {
   FMOD_SOUND *feelgood;
   FMOD_SOUND *totoro;
   FMOD_SOUND *jump;
+  FMOD_SOUND *playstation;
+
   FMOD_CHANNEL *channel = 0;
   FMOD_CHANNEL *channelJump = 0;
   FMOD_CHANNEL *channeMenu = 0;
@@ -93,6 +102,7 @@ int main(int argc, char** argv) {
   totoro = OuvrirMusique("music/totoro.mp3",totoro,system);
   feelgood = OuvrirMusique("music/feelgood.mp3",feelgood,system);
   jump = OuvrirMusique("music/jump.wav",jump,system);
+  playstation = OuvrirMusique("music/play.mp3",playstation,system);
 
   /// Initialisation de la SDL 
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -133,10 +143,22 @@ int main(int argc, char** argv) {
   // Initialisation des textures
   loadTexture("./images/totoro.jpg", textureID, 1);
   loadTexture("./images/henry.jpg", textureID, 2);
-  loadTexture("./images/was.jpg", textureID, 3);
-
+  loadTexture("./images/was1.jpg", textureID, 3);
+  //texture intro
+  if(intro==1)
+  for(i=4;i<371;i++)
+  {
+  strcpy(str, "./images/intro (");
+  sprintf(str1, "%d", i-3);
+  strcat(str, str1);
+  strcat(str,").jpg");
+  
+  loadTexture(str, textureID, i);
+  }
+  
+  if(intro == 1)channeMenu = JouerMusique(system,channel,channeMenu,playstation); 
     // Play music
-  if(level == 0) 
+  if(level == 0 && intro != 1) 
     channeMenu = JouerMusique(system,channel,channeMenu,starwars);
 
   if(level == 1 ) 
@@ -152,7 +174,7 @@ int main(int argc, char** argv) {
 
   // Boucle
   while(loop) {
-
+    printf("%d\n",img );
     float spectrum[SPECTRUMSIZE];
     float spectrumJump[SPECTRUMSIZE];
 
@@ -195,7 +217,7 @@ int main(int argc, char** argv) {
           exit(EXIT_FAILURE);
       }
     }
-
+    printf("intro%d\n",intro );
     //Dessin
    if(level == 0 || level == 99){
       if(credit == 1) {
@@ -208,9 +230,15 @@ int main(int argc, char** argv) {
 
         
       }
-      else DrawMenu(menu,textureID,windowWidth, windowHeight);
+      else{ 
+        if(intro != 1 )
+        DrawMenu(menu,textureID,windowWidth, windowHeight);
+        else{
+          nanosleep(&tim,&tim2);
+          DrawIntro(&img, &intro);
+        } 
+      }
     }
-
     else
     { 
 

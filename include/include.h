@@ -19,3 +19,5 @@
 #include "../include/Menu.h"
 #include "../include/Music.h"
 #include "../include/Credit.h"
+#include <time.h>
+#include <unistd.h>
