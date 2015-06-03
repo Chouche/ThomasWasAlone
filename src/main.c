@@ -208,7 +208,7 @@ int main(int argc, char** argv) {
 
         
       }
-      else DrawMenu(menu,textureID);
+      else DrawMenu(menu,textureID,windowWidth, windowHeight);
     }
 
     else

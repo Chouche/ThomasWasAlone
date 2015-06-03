@@ -10,6 +10,6 @@
 #include <math.h>
 #include <SDL/SDL_image.h> 
 
-void DrawMenu(int menu,GLuint textureID[10]);
+void DrawMenu(int menu,GLuint textureID[10],int windowWidth, int windowHeight);
 
 #endif
