@@ -25,14 +25,14 @@ void MooveYeuxTotoro(int right, int left,float *yt, float *xt, Personnage tabPer
 
  if(right==1&&tabPerso[0].position.x<86&&tabPerso[0].position.x>-36)
           {
-            *yt +=0.015;
-            *xt +=0.01;
+            *yt +=0.033;
+            *xt +=0.015;
           
           }
         if(left==1&&tabPerso[0].position.x<86&&tabPerso[0].position.x>-36)
           {
-            *yt -=0.015;
-            *xt -=0.01;
+            *yt -=0.033;
+            *xt -=0.015;
           }  
         
      
@@ -42,7 +42,7 @@ void MooveYeuxTotoro(int right, int left,float *yt, float *xt, Personnage tabPer
 void DessinYeuxTotoro(float yt, float xt)
 {
 		glColor3f(0,0,0);
-        glTranslatef(yt + 24.,-12.5,0.);
+        glTranslatef(yt + 23.8,-12.5,0.);
         dessinCercle(10000,1);
 
         glTranslatef(xt+15.5,0.5,0.);

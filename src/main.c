@@ -57,19 +57,19 @@ int main(int argc, char** argv) {
   Personnage tabPerso[4];
   int currentPerso = 0;
   int level = 0,menu=0;
-  int intro = 0;
+  int intro = 1;
   int gagne = 0;
   float zoom = ZOOM;
   float xt=0,yt=0;
   int credit = 0, loadintro=4;
-  GLuint textureID[380];
+  GLuint textureID[1200];
   char str[50];
   char str1[50];
   struct timespec tim, tim2;
   tim.tv_sec  = 0;
   tim.tv_nsec = 30000000L;
- // int load1 = 371,load2 = 621;
-int load1 = 621,load2 = 871;
+  int load1 = 371,load2 = 621,load3=871;
+  //int load1 = 621,load2 = 871, load3=1121;
 
   FMOD_SYSTEM *system;
   FMOD_SOUND *musique = NULL;
@@ -197,7 +197,7 @@ int load1 = 621,load2 = 871;
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     // Level 99 = credit
-    if((level==99)||(load1<621&&level==1)||(load2<871&&level==2)){
+    if((level==99)||(load1<621&&level==1)||(load2<871&&level==2)||(load3<1121&&level==3)){
       gluOrtho2D(-150., 150., -130*(windowHeight/(float)windowWidth), 130*(windowHeight/(float)windowWidth));
     }   
     else if(level == 0)
@@ -274,7 +274,15 @@ int load1 = 621,load2 = 871;
         loadTexture(str, textureID, load2);
         DrawIntrolvl(&load2);
       }
-      if((level== 1 && load1==621)||(level == 2 && load2==871)||level == 3){
+      if(level == 3 && load3 != 1121){
+        strcpy(str, "./images/level3 (");
+        sprintf(str1, "%d", load3-870);
+        strcat(str, str1);
+        strcat(str,").jpg");
+        loadTexture(str, textureID, load3);
+        DrawIntrolvl(&load3);
+      }
+      if((level== 1 && load1==621)||(level == 2 && load2==871)||(level == 3 && load3==1121)){
   
         dessinSpectre(spectrum,spectrumJump,currentPerso,up, level);
 
@@ -392,16 +400,20 @@ int load1 = 621,load2 = 871;
               break;  
             
             case SDLK_a:
+              if(level!=0){
               if(currentPerso == 0) currentPerso = nb_perso;
               if(currentPerso > 0) currentPerso--;
               up=0;
+              }
             break; 
 
             case SDLK_e:
             case SDLK_TAB :
+              if(level!=0){
               if(currentPerso < nb_perso) currentPerso++;
               if(currentPerso==nb_perso) currentPerso = 0;
               up=0;
+              }
             break;
 
             case SDLK_w:
@@ -425,7 +437,7 @@ int load1 = 621,load2 = 871;
               break; 
 
             case SDLK_RETURN:
-              if(intro!=1){
+              if(intro!=1&&level==0){
               if(level !=99) credit = 0;
               if(level==0){
                 if(menu == 0){
@@ -535,7 +547,7 @@ int load1 = 621,load2 = 871;
               load2=621;
               goto BEGGINNING;
         }
-        printf("C'est gagné ! \n");
+        
         level++; 
         goto BEGGINNING;
     }
