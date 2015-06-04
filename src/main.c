@@ -432,6 +432,7 @@ int main(int argc, char** argv) {
               currentPerso=0;
               load1=371;
               load2=621;
+              load3=871;
               goto BEGGINNING;
               }
               break; 
