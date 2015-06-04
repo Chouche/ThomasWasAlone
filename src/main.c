@@ -51,7 +51,6 @@ int main(int argc, char** argv) {
   int nb_bloc = 0,nb_pluie=300;
   int nb_perso = 0;
   int left=0,right=0,up=0, i = 0;
-  float t = 0.0;
   Bloc tabBlocs[100];
   Bloc tabBlocsFinaux[4];
   Bloc tabPluie[nb_pluie];
@@ -64,7 +63,6 @@ int main(int argc, char** argv) {
   float xt=0,yt=0;
   int credit = 0, loadintro=4;
   GLuint textureID[380];
-  int tempo, tempo_max=500;
   char str[50];
   char str1[50];
   struct timespec tim, tim2;
@@ -74,18 +72,17 @@ int main(int argc, char** argv) {
 int load1 = 621,load2 = 871;
 
   FMOD_SYSTEM *system;
-  FMOD_SOUND *musique;
-  FMOD_SOUND *starwars;
-  FMOD_SOUND *feelgood;
-  FMOD_SOUND *totoro;
-  FMOD_SOUND *jump;
-  FMOD_SOUND *playstation;
-  FMOD_SOUND *mission;
+  FMOD_SOUND *musique = NULL;
+  FMOD_SOUND *starwars = NULL;
+  FMOD_SOUND *feelgood = NULL;
+  FMOD_SOUND *totoro = NULL;
+  FMOD_SOUND *jump = NULL;
+  FMOD_SOUND *playstation = NULL;
+  FMOD_SOUND *mission = NULL;
 
   FMOD_CHANNEL *channel = 0;
   FMOD_CHANNEL *channelJump = 0;
   FMOD_CHANNEL *channeMenu = 0;
-  FMOD_CHANNEL *channeCredit = 0;
   FMOD_CHANNEL *channelIntro = 0;
   FMOD_RESULT resultat;
 
@@ -408,9 +405,10 @@ int load1 = 621,load2 = 871;
             break;
 
             case SDLK_w:
-              if(level != 0)
+              if(level != 0) {
                 if(zoom == ZOOM) zoom = DEZOOM;
                 else zoom = ZOOM;
+              }
             break;
 
             //Touche M//  
@@ -500,7 +498,7 @@ int load1 = 621,load2 = 871;
     if(level!=0){
     if(left == 1){
       for(i=0; i<nb_bloc; i++ ) {
-        if(CollisionHG(tabPerso[currentPerso], tabBlocs[i])== 1 && i != currentPerso || CollisionBG(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso ) colLeft = 1;
+        if( (CollisionHG(tabPerso[currentPerso], tabBlocs[i])== 1 && i != currentPerso) || (CollisionBG(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso) ) colLeft = 1;
       }
       if(colLeft == 0) MooveLeft(&tabPerso[currentPerso]);
    
@@ -510,7 +508,7 @@ int load1 = 621,load2 = 871;
 
     if(right == 1){
       for(i=0; i<nb_bloc; i++ ) {
-        if(CollisionHD(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso || CollisionBD(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso) colRight = 1;
+        if( (CollisionHD(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso) || (CollisionBD(tabPerso[currentPerso], tabBlocs[i]) == 1 && i != currentPerso) ) colRight = 1;
       }
       if(colRight == 0) MooveRight(&tabPerso[currentPerso]);
        
@@ -529,7 +527,6 @@ int load1 = 621,load2 = 871;
       
     if(gagne == nb_perso) {
         if(level == 3){
-         if(intro!=1){
              level = 0;
               menu = 0;
               credit=0;
@@ -537,7 +534,6 @@ int load1 = 621,load2 = 871;
               load1=371;
               load2=621;
               goto BEGGINNING;
-          }
         }
         printf("C'est gagné ! \n");
         level++; 

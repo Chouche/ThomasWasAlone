@@ -10,27 +10,39 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
   char* str1;
   float px,py,tx,ty,r,g,b;
   int id;
+  char* res;
 
   fichier = fopen(f, "r+");
 
   if (fichier != NULL) {
     
 
-    fgets(chaine, TAILLE_MAX, fichier);
+    res = fgets(chaine, TAILLE_MAX, fichier);
+    if(res == NULL) 
+    {
+      perror("Error opening file");
+      exit(1);
+    }
 
     str1 = strtok(chaine,"\n");
     *nb_perso = atoi(str1);
 
-    fgets(chaine, TAILLE_MAX, fichier);
+    res = fgets(chaine, TAILLE_MAX, fichier);
+    if(res == NULL) 
+    {
+      perror("Error opening file");
+      exit(1);
+    }
     str1 = strtok(chaine,"\n");
     *nb_bloc = atoi(str1);
 
-    fgets(chaine, TAILLE_MAX, fichier);
+    res = fgets(chaine, TAILLE_MAX, fichier);
+  
     str1 = strtok(chaine, "\n");
     for(i = 0; i<*nb_perso; i++) {
       recupParametres(&px,&py,&tx,&ty,&r,&g,&b,&id,str1);
       tabPerso[i] = Personnage2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b),i,0.0,PointXY(px,py));
-      fgets(chaine, sizeof(chaine), fichier);
+      res = fgets(chaine, sizeof(chaine), fichier);
       str1 = strtok(chaine,"\n");
     }
 
@@ -38,7 +50,7 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
     for(i = 0; i<*nb_bloc; i++) {
       recupParametres(&px,&py,&tx,&ty,&r,&g,&b,&id,str1);
       tabBlocs[i] = Bloc2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b),id);
-      fgets(chaine, sizeof(chaine), fichier);
+      res = fgets(chaine, sizeof(chaine), fichier);
       str1 = strtok(chaine,"\n");
     }
     
@@ -46,7 +58,7 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
     for(i = 0; i<*nb_perso; i++) {
       recupParametres(&px,&py,&tx,&ty,&r,&g,&b,&id,str1);
       tabBlocsFinaux[i] = Bloc2D(PointXY(px,py),TailleXY(tx,ty),ColorRGB(r, g, b),id);
-      fgets(chaine, sizeof(chaine), fichier);
+      res = fgets(chaine, sizeof(chaine), fichier);
       str1 = strtok(chaine,"\n");
     }
   }
@@ -57,7 +69,6 @@ void initializeLvl(Personnage tabPerso[], Bloc tabBlocs[], Bloc tabBlocsFinaux[]
 }
 
 void recupParametres(float* px, float* py, float* tx, float* ty, float* r, float* g, float* b,int* id, char* str1){
-    char* str;
 
     str1 = strtok(str1,",");
     *px = atof(str1); str1 = strtok(NULL, ","); 
