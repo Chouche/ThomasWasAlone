@@ -405,6 +405,7 @@ int main(int argc, char** argv) {
               level = 0;
               menu = 0;
               credit=0;
+              currentPerso=0;
               load1=371;
               load2=621;
               goto BEGGINNING;
@@ -412,6 +413,7 @@ int main(int argc, char** argv) {
               break; 
 
             case SDLK_RETURN:
+              if(intro!=1){
               if(level !=99) credit = 0;
               if(level==0){
                 if(menu == 0){
@@ -423,7 +425,7 @@ int main(int argc, char** argv) {
                   level=99;
                   goto BEGGINNING;
                 }
-
+              }
                 if(menu==11){
                   level=1;
                   goto BEGGINNING;
