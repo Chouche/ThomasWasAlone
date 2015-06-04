@@ -262,7 +262,7 @@ if (*img==371)
 	*intro=*intro+4;
 
 }
-	printf("%d\n",*intro );
+
 }
 
 void DrawIntrolvl(int * img){

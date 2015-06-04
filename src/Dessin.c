@@ -2,7 +2,9 @@
 
 void dessinCarre(int Filled, float r, float g, float b , float positionX, float positionY,float tailleX, float tailleY ){
   glColor3ub(r, g, b);
-  if(Filled==1) glBegin(GL_QUADS);
+  if(Filled==1) { 
+    glBegin(GL_QUADS);
+  }
   else glBegin(GL_LINE_LOOP);
     glVertex2f(positionX, positionY);
     glVertex2f(positionX+tailleX, positionY);
@@ -32,38 +34,43 @@ void dessinCercle(int nbsubdivision, int Filled){
   glEnd();
 }
 
-void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso,int up) {
+void dessinSpectre(float spectrum[], float spectrumJump[], int currentPerso,int up, int level) {
 
   int i;
   int count = -1;
   int count2 = 0;
+  int longueur = 260;
 
-  for (i=0; i < 300; i++)
+  if(level == 1) longueur = 500;
+
+  for (i=0; i < longueur; i++)
   {
           if(currentPerso == 0) glColor4f(105.0, 0.0, 53.0,0.7);
           if(currentPerso == 1) glColor4f(255.0, 0.0, 0.0,0.7);
+          if(currentPerso == 2) glColor4f(0.14, 0.19,1.0,0.7);
+         
           glBegin(GL_LINES);
-          glVertex3f(count, 0.0, 0.0);
-          if (up == 1) glVertex3f(count, spectrum[i]*pow(13,3) + spectrumJump[i]*pow(13,3), 0);
-          if (up == 0) glVertex3f(count, spectrum[i]*pow(13,3), 0);
+          glVertex3f(count, 30, 0.0);
+          if (up == 1) glVertex3f(count, 30 + spectrum[i]*pow(15,3) + spectrumJump[i]*pow(13,3), 0);
+          if (up == 0) glVertex3f(count, 30 +spectrum[i]*pow(15,3), 0);
           glEnd();
 
           glBegin(GL_LINES);
-          glVertex3f(count2, 0.0, 0.0);
-          if (up == 1) glVertex3f(count2, spectrum[i]*pow(13,3) + spectrumJump[i]*pow(13,3), 0);
-          if (up == 0) glVertex3f(count2, spectrum[i]*pow(13,3), 0);
+          glVertex3f(count2, 30, 0.0);
+          if (up == 1) glVertex3f(count2, 30 + spectrum[i]*pow(15,3) + spectrumJump[i]*pow(13,3), 0);
+          if (up == 0) glVertex3f(count2, 30 + spectrum[i]*pow(15,3), 0);
           glEnd();
 
           glBegin(GL_LINES);
-          glVertex3f(count,0.0, 0.0);
-          if (up == 1) glVertex3f(count,-spectrum[i]*pow(13,3) - spectrumJump[i]*pow(13,3), 0);
-          if (up == 0) glVertex3f(count,-spectrum[i]*pow(13,3), 0);
+          glVertex3f(count,30, 0.0);
+          if (up == 1) glVertex3f(count,-spectrum[i]*pow(15,3) - spectrumJump[i]*pow(13,3) + 30, 0);
+          if (up == 0) glVertex3f(count,-spectrum[i]*pow(15,3) + 30, 0);
           glEnd();
 
           glBegin(GL_LINES);
-          glVertex3f(count2,0.0, 0.0);
-          if (up == 1) glVertex3f(count2,-spectrum[i]*pow(13,3) - spectrumJump[i]*pow(13,3), 0);
-          if (up == 0) glVertex3f(count2,-spectrum[i]*pow(13,3), 0);
+          glVertex3f(count2,30, 0.0);
+          if (up == 1) glVertex3f(count2,-spectrum[i]*pow(15,3) - spectrumJump[i]*pow(13,3) + 30, 0);
+          if (up == 0) glVertex3f(count2,-spectrum[i]*pow(15,3) + 30, 0);
           glEnd();
 
           count ++; 
@@ -107,7 +114,6 @@ void loadTexture(const char* filename, GLuint textureID[10], int numTexture){
   SDL_Surface* image;
   image = IMG_Load(filename);
 
-  printf("filename: %s",filename);
   if(image == NULL){
     printf("Error : image not found : %s\n", filename);
   }

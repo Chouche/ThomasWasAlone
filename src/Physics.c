@@ -61,7 +61,7 @@ void Physics(Personnage * perso, int nb_bloc, Bloc blocs[],float * t,int * up, i
   // Permet de sauter 
   if((colDown == 1) && (*up == 1) && (perso->id == currentPerso)) {
 
-    *t += (perso->id + 2);
+    *t += (perso->id/1.2 + 1.2);
     perso->position.y = perso->position.y+5;
 
     Gravity(perso, *t,0.001);

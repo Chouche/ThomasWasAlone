@@ -2,8 +2,8 @@
 #include <math.h>
 
 #define SPECTRUMSIZE        8192
-#define ZOOM 6
-#define DEZOOM 4
+#define ZOOM 4
+#define DEZOOM 2
 
 
 static const unsigned int BIT_PER_PIXEL = 32;
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
   Personnage tabPerso[4];
   int currentPerso = 0;
   int level = 0,menu=0;
-  int intro = 1;
+  int intro = 0;
   int gagne = 0;
   float zoom = ZOOM;
   float xt=0,yt=0;
@@ -70,7 +70,8 @@ int main(int argc, char** argv) {
   struct timespec tim, tim2;
   tim.tv_sec  = 0;
   tim.tv_nsec = 30000000L;
-  int load1 = 371,load2 = 621;
+ // int load1 = 371,load2 = 621;
+int load1 = 621,load2 = 871;
 
   FMOD_SYSTEM *system;
   FMOD_SOUND *musique;
@@ -79,6 +80,7 @@ int main(int argc, char** argv) {
   FMOD_SOUND *totoro;
   FMOD_SOUND *jump;
   FMOD_SOUND *playstation;
+  FMOD_SOUND *mission;
 
   FMOD_CHANNEL *channel = 0;
   FMOD_CHANNEL *channelJump = 0;
@@ -105,6 +107,7 @@ int main(int argc, char** argv) {
   feelgood = OuvrirMusique("music/feelgood.mp3",feelgood,system);
   jump = OuvrirMusique("music/jump.wav",jump,system);
   playstation = OuvrirMusique("music/play.mp3",playstation,system);
+  mission = OuvrirMusique("music/mission.mp3",mission,system);
 
   /// Initialisation de la SDL 
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
@@ -132,6 +135,9 @@ int main(int argc, char** argv) {
      break;
     case 2:
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau2.txt");
+      break;
+    case 3:
+      initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/niveau3.txt");
       break;
     case 99:
       initializeLvl(tabPerso,tabBlocs, tabBlocsFinaux, &nb_perso,&nb_bloc,"niveaux/credit.txt");
@@ -163,6 +169,10 @@ int main(int argc, char** argv) {
     FMOD_Channel_Stop(channeMenu);
     channel = JouerMusique(system,channel,channel,musique);
   }
+  if(level == 3 ) {
+    FMOD_Channel_Stop(channeMenu);
+    channel = JouerMusique(system,channel,channel,mission);
+  }
   
   if (level==99)
     channel = JouerMusique(system,channeMenu,channel,totoro);
@@ -193,15 +203,17 @@ int main(int argc, char** argv) {
     if((level==99)||(load1<621&&level==1)||(load2<871&&level==2)){
       gluOrtho2D(-150., 150., -130*(windowHeight/(float)windowWidth), 130*(windowHeight/(float)windowWidth));
     }   
-    else
+    else if(level == 0)
     {  
-      gluOrtho2D( tabPerso[currentPerso].position.x - windowWidth / zoom, tabPerso[currentPerso].position.x + windowWidth /  zoom, tabPerso[currentPerso].position.y - windowHeight / zoom, tabPerso[currentPerso].position.y + windowHeight / zoom);
+      gluOrtho2D( tabPerso[currentPerso].position.x - windowWidth / zoom, tabPerso[currentPerso].position.x + windowWidth /  zoom, (tabPerso[currentPerso].position.y - windowHeight / zoom), (tabPerso[currentPerso].position.y + windowHeight / zoom));
     }
+    else gluOrtho2D( tabPerso[currentPerso].position.x - windowWidth / zoom, tabPerso[currentPerso].position.x + windowWidth /  zoom, (tabPerso[currentPerso].position.y - windowHeight / zoom) + 60, (tabPerso[currentPerso].position.y + windowHeight / zoom) + 60);
+   
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // Récupération du spectre
-    if(level == 1 || level == 2) {
+    if(level == 1||level == 2||level == 3) {
       resultat = FMOD_Channel_GetSpectrum(channel, spectrum, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
       if (resultat != FMOD_OK)
       {
@@ -217,7 +229,6 @@ int main(int argc, char** argv) {
           exit(EXIT_FAILURE);
       }
     }
-    printf("intro%d\n",intro );
     //Dessin
    if(level == 0 || level == 99){
       if(credit == 1) {
@@ -266,28 +277,31 @@ int main(int argc, char** argv) {
         loadTexture(str, textureID, load2);
         DrawIntrolvl(&load2);
       }
-      if(level== 1 && load1==621 || level == 2 && load2==871){
-      dessinSpectre(spectrum,spectrumJump,currentPerso,up);
+      if((level== 1 && load1==621)||(level == 2 && load2==871)||level == 3){
+  
+        dessinSpectre(spectrum,spectrumJump,currentPerso,up, level);
 
-      for(i=0; i < nb_perso; i++) {
-        dessinOpacity(1, tabBlocsFinaux[i].color.r, tabBlocsFinaux[i].color.g, tabBlocsFinaux[i].color.b, tabBlocsFinaux[i].position.x, tabBlocsFinaux[i].position.y,tabBlocsFinaux[i].taille.x,tabBlocsFinaux[i].taille.y);
-      }
-
-      for(i=0; i < nb_perso; i++)
-        if (i==currentPerso)
-        {
-          DessinPersonnageCarre(tabPerso[i]);
+        for(i=0; i < nb_perso; i++) {
+          glLineWidth(2);
+          DessinBlocCarre(tabBlocsFinaux[i],0);
+          glLineWidth(1);
         }
-        else
-        {
-          dessinCarre(1, 126, 126, 126 , tabPerso[i].position.x, tabPerso[i].position.y,tabPerso[i].taille.x, tabPerso[i].taille.y );
-        } 
-        
 
-      for(i=nb_perso; i < nb_bloc; i++){
-        if(tabBlocs[i].id == currentPerso || tabBlocs[i].id == -1)
-          DessinBlocCarre(tabBlocs[i], 1); 
-      }
+        for(i=0; i < nb_perso; i++)
+          if (i==currentPerso)
+          {
+            DessinPersonnageCarre(tabPerso[i]);
+          }
+          else
+          {
+            dessinCarre(1, 126, 126, 126 , tabPerso[i].position.x, tabPerso[i].position.y,tabPerso[i].taille.x, tabPerso[i].taille.y );
+          } 
+          
+
+        for(i=nb_perso; i < nb_bloc; i++){
+          if(tabBlocs[i].id == currentPerso || tabBlocs[i].id == -1)
+            DessinBlocCarre(tabBlocs[i], 1); 
+        }
       }
       //Bloc du perso suis le perso
       for(i=0; i < nb_perso; i++){
@@ -438,6 +452,10 @@ int main(int argc, char** argv) {
                   level=2;
                   goto BEGGINNING;
                 }
+                if(menu==13){
+                  level=3;
+                  goto BEGGINNING;
+                }
               }
               break;
 
@@ -510,20 +528,30 @@ int main(int argc, char** argv) {
     }
       
     if(gagne == nb_perso) {
+        if(level == 3){
+         if(intro!=1){
+             level = 0;
+              menu = 0;
+              credit=0;
+              currentPerso=0;
+              load1=371;
+              load2=621;
+              goto BEGGINNING;
+          }
+        }
         printf("C'est gagné ! \n");
         level++; 
         goto BEGGINNING;
     }
     gagne = 0;
     
-   for (i = 0; i < nb_perso; i++)
-   {
-   
-    if(Dead(&tabPerso[i]))
-    {
-      tabPerso[i].t = 0;
-      glMatrixMode(GL_PROJECTION);
-      glPopMatrix();
+     for (i = 0; i < nb_perso; i++)
+     {
+        if(Dead(&tabPerso[i]))
+        {
+          tabPerso[i].t = 0;
+          glMatrixMode(GL_PROJECTION);
+          glPopMatrix();
 
         }   
       }
