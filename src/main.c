@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
   }
   setVideoMode(windowWidth, windowHeight);
 
-  SDL_WM_SetCaption("tabPerso[0] Was Alone", NULL);
+  SDL_WM_SetCaption("Henry Was Alone", NULL);
  
   glPointSize(4);
 
@@ -211,19 +211,23 @@ int main(int argc, char** argv) {
 
     // Récupération du spectre
     if(level == 1||level == 2||level == 3) {
-      resultat = FMOD_Channel_GetSpectrum(channel, spectrum, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
-      if (resultat != FMOD_OK)
-      {
-          fprintf(stderr, "Impossible de récupérer le spectre\n");
-          exit(EXIT_FAILURE);
+      if(channel != NULL) {
+        resultat = FMOD_Channel_GetSpectrum(channel, spectrum, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
+        if (resultat != FMOD_OK)
+        {
+            fprintf(stderr, "Impossible de récupérer le spectre\n");
+            exit(EXIT_FAILURE);
+        }
       }
     }
     if(up == 1 && level !=99) {
-      resultat = FMOD_Channel_GetSpectrum(channelJump, spectrumJump, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
-      if (resultat != FMOD_OK)
-      {
-          fprintf(stderr, "Impossible de récupérer le spectre\n");
-          exit(EXIT_FAILURE);
+      if(channelJump != NULL) {
+        resultat = FMOD_Channel_GetSpectrum(channelJump, spectrumJump, SPECTRUMSIZE, 0, FMOD_DSP_FFT_WINDOW_TRIANGLE); 
+        if (resultat != FMOD_OK)
+        {
+            fprintf(stderr, "Impossible de récupérer le spectre\n");
+            exit(EXIT_FAILURE);
+        }
       }
     }
     //Dessin

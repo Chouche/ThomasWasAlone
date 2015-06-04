@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -O2 -g
 LDFLAGS = -lfmodex64-4.34.05 -lSDL -lm -lGLU -lGL -lglut -lSDL_mixer -lSDL_image
-APP_BIN = main
+APP_BIN = HenryWasAlone
 
 SRC_PATH = src
 OBJ_PATH = obj
