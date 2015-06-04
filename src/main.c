@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
   float zoom = ZOOM;
   float xt=0,yt=0;
   int credit = 0, loadintro=4;
-  GLuint textureID[1200];
+  GLuint textureID[360];
   char str[50];
   char str1[50];
   struct timespec tim, tim2;
