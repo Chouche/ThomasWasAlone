@@ -62,14 +62,15 @@ int main(int argc, char** argv) {
   int gagne = 0;
   float zoom = ZOOM;
   float xt=0,yt=0;
-  int credit = 0, img=4;
+  int credit = 0, loadintro=4;
   GLuint textureID[380];
   int tempo, tempo_max=500;
   char str[50];
   char str1[50];
   struct timespec tim, tim2;
   tim.tv_sec  = 0;
-  tim.tv_nsec = 40000000L;
+  tim.tv_nsec = 30000000L;
+  int load1 = 371,load2 = 621;
 
   FMOD_SYSTEM *system;
   FMOD_SOUND *musique;
@@ -83,6 +84,7 @@ int main(int argc, char** argv) {
   FMOD_CHANNEL *channelJump = 0;
   FMOD_CHANNEL *channeMenu = 0;
   FMOD_CHANNEL *channeCredit = 0;
+  FMOD_CHANNEL *channelIntro = 0;
   FMOD_RESULT resultat;
 
 
@@ -144,22 +146,15 @@ int main(int argc, char** argv) {
   loadTexture("./images/totoro.jpg", textureID, 1);
   loadTexture("./images/henry.jpg", textureID, 2);
   loadTexture("./images/was1.jpg", textureID, 3);
-  //texture intro
-  if(intro==1)
-  for(i=4;i<371;i++)
-  {
-  strcpy(str, "./images/intro (");
-  sprintf(str1, "%d", i-3);
-  strcat(str, str1);
-  strcat(str,").jpg");
-  
-  loadTexture(str, textureID, i);
+  //texture intro  
+  if(intro == 1) {
+    channelIntro = JouerMusique(system,channel,channelIntro,playstation); 
   }
-  
-  if(intro == 1)channeMenu = JouerMusique(system,channel,channeMenu,playstation); 
     // Play music
-  if(level == 0 && intro != 1) 
+  if(level == 0 && intro != 1){
+    FMOD_Channel_Stop(channelIntro);
     channeMenu = JouerMusique(system,channel,channeMenu,starwars);
+  }
 
   if(level == 1 ) 
     channel = JouerMusique(system,channeMenu,channel,feelgood);
@@ -174,7 +169,12 @@ int main(int argc, char** argv) {
 
   // Boucle
   while(loop) {
-    printf("%d\n",img );
+    // Pour changer la musique
+    if(intro == 5) {
+      intro = 2;
+      goto BEGGINNING;
+    }
+    
     float spectrum[SPECTRUMSIZE];
     float spectrumJump[SPECTRUMSIZE];
 
@@ -190,7 +190,7 @@ int main(int argc, char** argv) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     // Level 99 = credit
-    if(level==99){
+    if((level==99)||(load1<621&&level==1)||(load2<871&&level==2)){
       gluOrtho2D(-150., 150., -130*(windowHeight/(float)windowWidth), 130*(windowHeight/(float)windowWidth));
     }   
     else
@@ -234,17 +234,39 @@ int main(int argc, char** argv) {
         if(intro != 1 )
         DrawMenu(menu,textureID,windowWidth, windowHeight);
         else{
+
+          strcpy(str, "./images/intro (");
+          sprintf(str1, "%d", loadintro-3);
+          strcat(str, str1);
+          strcat(str,").jpg");
+  
+          loadTexture(str, textureID, loadintro);
           nanosleep(&tim,&tim2);
-          DrawIntro(&img, &intro);
+          DrawIntro(&loadintro, &intro);
         } 
       }
     }
     else
     { 
 
-      if(level == 1) {
-      }
+      if(level == 1 && load1 != 621) {
 
+        strcpy(str, "./images/level1 (");
+        sprintf(str1, "%d", load1-370);
+        strcat(str, str1);
+        strcat(str,").jpg");
+        loadTexture(str, textureID, load1);
+        DrawIntrolvl(&load1);
+      }
+      if(level == 2 && load2 != 871){
+        strcpy(str, "./images/level2 (");
+        sprintf(str1, "%d", load2-620);
+        strcat(str, str1);
+        strcat(str,").jpg");
+        loadTexture(str, textureID, load2);
+        DrawIntrolvl(&load2);
+      }
+      if(level== 1 && load1==621 || level == 2 && load2==871){
       dessinSpectre(spectrum,spectrumJump,currentPerso,up);
 
       for(i=0; i < nb_perso; i++) {
@@ -266,7 +288,7 @@ int main(int argc, char** argv) {
         if(tabBlocs[i].id == currentPerso || tabBlocs[i].id == -1)
           DessinBlocCarre(tabBlocs[i], 1); 
       }
-
+      }
       //Bloc du perso suis le perso
       for(i=0; i < nb_perso; i++){
           tabBlocs[i].position.x=tabPerso[i].position.x;
@@ -379,11 +401,14 @@ int main(int argc, char** argv) {
 
             //Touche M//  
             case SDLK_m:
+              if(intro!=1){
               level = 0;
               menu = 0;
               credit=0;
+              load1=371;
+              load2=621;
               goto BEGGINNING;
-              
+              }
               break; 
 
             case SDLK_RETURN:

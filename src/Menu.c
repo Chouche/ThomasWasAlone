@@ -204,10 +204,10 @@ void DrawMenu(int menu,GLuint textureID[380],int windowWidth, int windowHeight){
       glColor3f(1,1,1);
 
       glTexCoord2f(0, 0);
-      glVertex2f(-110, -40);
+      glVertex2f(-110, -50);
 
       glTexCoord2f(1, 0);
-      glVertex2f(110, -40);
+      glVertex2f(110, -50);
 
       glTexCoord2f(1, 1);
       glVertex2f(110, -100);
@@ -227,7 +227,7 @@ void DrawMenu(int menu,GLuint textureID[380],int windowWidth, int windowHeight){
 
 
 void DrawIntro(int * img, int * intro){
-	int i,g;
+	
 	//carrée pour tout effacer 
 	glEnable(GL_TEXTURE_2D);
     // FIXME : Bind texture
@@ -263,4 +263,37 @@ if (*img==371)
 
 }
 	printf("%d\n",*intro );
+}
+
+void DrawIntrolvl(int * img){
+	
+	//carrée pour tout effacer 
+	glEnable(GL_TEXTURE_2D);
+    // FIXME : Bind texture
+    /* Dessin du quad */
+    glColor3ub(50,50,50);
+    glBindTexture(GL_TEXTURE_2D, *img);
+    glBegin(GL_QUADS);
+      glColor3f(1,1,1);
+
+      glTexCoord2f(0, 1);
+      glVertex2f(-150, -100);
+
+      glTexCoord2f(1, 1);
+      glVertex2f(150, -100);
+
+      glTexCoord2f(1, 0);
+      glVertex2f(150, 100);
+
+      glTexCoord2f(0, 0);
+      glVertex2f(-150, 100);
+
+    glEnd();
+
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  glDisable(GL_TEXTURE_2D);
+  *img=*img+1;
+  
 }

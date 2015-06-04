@@ -13,4 +13,5 @@
 
 void DrawMenu(int menu,GLuint textureID[380],int windowWidth, int windowHeight);
 void DrawIntro(int * img, int * intro);
+void DrawIntrolvl(int * img);
 #endif
