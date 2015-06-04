@@ -243,7 +243,7 @@ int main(int argc, char** argv) {
         DrawMenu(menu,textureID,windowWidth, windowHeight);
         else{
 
-          strcpy(str, "./images/intro (");
+          strcpy(str, "./images/intro/intro (");
           sprintf(str1, "%d", loadintro-3);
           strcat(str, str1);
           strcat(str,").jpg");
@@ -259,7 +259,7 @@ int main(int argc, char** argv) {
 
       if(level == 1 && load1 != 621) {
 
-        strcpy(str, "./images/level1 (");
+        strcpy(str, "./images/lvl1/level1 (");
         sprintf(str1, "%d", load1-370);
         strcat(str, str1);
         strcat(str,").jpg");
@@ -267,7 +267,7 @@ int main(int argc, char** argv) {
         DrawIntrolvl(&load1);
       }
       if(level == 2 && load2 != 871){
-        strcpy(str, "./images/level2 (");
+        strcpy(str, "./images/lvl2/level2 (");
         sprintf(str1, "%d", load2-620);
         strcat(str, str1);
         strcat(str,").jpg");
@@ -275,7 +275,7 @@ int main(int argc, char** argv) {
         DrawIntrolvl(&load2);
       }
       if(level == 3 && load3 != 1121){
-        strcpy(str, "./images/level3 (");
+        strcpy(str, "./images/lvl3/level3 (");
         sprintf(str1, "%d", load3-870);
         strcat(str, str1);
         strcat(str,").jpg");
